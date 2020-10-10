@@ -14,7 +14,7 @@ public class Ghosts extends GhostController {
 	private EnumMap<GHOST, MOVE> moves = new EnumMap<GHOST, MOVE>(GHOST.class);
 	private MOVE[] allMoves = MOVE.values();
 	private Random rnd = new Random();
-	private int limit = 15;
+	private final static int LIMIT = 15;
 
 	@Override
 	public EnumMap<GHOST, MOVE> getMove(Game game, long timeDue) {
@@ -41,7 +41,7 @@ public class Ghosts extends GhostController {
 		
 		for(int i :game.getPowerPillIndices()) {
 			if(game.isPillStillAvailable(i)) {
-				if(game.getDistance(game.getPacmanCurrentNodeIndex(), i, DM.PATH) <= limit) {
+				if(game.getDistance(game.getPacmanCurrentNodeIndex(), i, DM.PATH) <= LIMIT) {
 					isClose = true;
 					break;
 				}
