@@ -29,11 +29,11 @@ public class MsPacMan extends PacmanController {
 
 	private GHOST getNearestChasingGhost(Game game, int limit) {
 		GHOST nearestGhost = null;
-		int nearestDistance = limit;
+		double nearestDistance = limit;
 
 		for (GHOST ghostType : GHOST.values()) {
 			if (!game.isGhostEdible(ghostType)) {
-				int distance = Math.abs(game.getGhostCurrentNodeIndex(ghostType) - game.getPacmanCurrentNodeIndex());
+				double distance = game.getDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghostType), DM.PATH);
 				if (distance < nearestDistance) {
 					nearestGhost = ghostType;
 					nearestDistance = distance;
@@ -46,11 +46,11 @@ public class MsPacMan extends PacmanController {
 
 	private GHOST getNearestEdibleGhost(Game game, int limit) {
 		GHOST nearestGhost = null;
-		int nearestDistance = limit;
+		double nearestDistance = limit;
 
 		for (GHOST ghostType : GHOST.values()) {
 			if (game.isGhostEdible(ghostType)) {
-				int distance = Math.abs(game.getGhostCurrentNodeIndex(ghostType) - game.getPacmanCurrentNodeIndex());
+				double distance = game.getDistance(game.getGhostCurrentNodeIndex(ghostType), game.getPacmanCurrentNodeIndex(), DM.PATH);
 				if (distance < nearestDistance) {
 					nearestGhost = ghostType;
 					nearestDistance = distance;
