@@ -11,23 +11,16 @@ public class ExecutorTest {
 	public static void main(String[] args) {
 		Executor executor = new Executor.Builder()
 				.setTickLimit(4000)
+				//.setGhostPO(true)
+				//.setPacmanPO(true)
+				//.setPacmanPOvisual(true)
+				
 				.setVisual(true)
-				.setScaleFactor(3.0)
+				.setScaleFactor(2.0)
 				.build();
-		PacmanController pacMan = new PacManRandom();
-		//PacmanController pacMan = new HumanController(new KeyBoardInput());
-
-		GhostController ghosts = new  GhostRandom();
-		
-		
-		
-		
-		System.out.println(
-		executor.runGame(pacMan, ghosts, 50)
-		);
-		
-		}
-		
+				
+		PacmanController pacMan = new MsPacMan();//new HumanController(new KeyBoardInput());//new PacManRandom();
+		GhostController ghosts = new GhostRandom();
+		System.out.println(executor.runGame(pacMan, ghosts, 50));
+	}
 }
-
-
