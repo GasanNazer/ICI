@@ -1,5 +1,7 @@
 package es.ucm.fdi.ici.c2021.practica0.grupo06;
 
+import java.util.ArrayList;
+
 import pacman.controllers.PacmanController;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
@@ -11,20 +13,27 @@ public class MsPacMan extends PacmanController {
 	@Override
 	public MOVE getMove(Game game, long timeDue) {
 		int limit = 20;
+		/*
 		GHOST nearestGhost = getNearestChasingGhost(game, limit);
 		if (nearestGhost != null) {
+			System.out.println("Nearest ghost chasing:" + nearestGhost);
 			return game.getNextMoveAwayFromTarget(game.getPacmanCurrentNodeIndex(),
-					game.getGhostCurrentNodeIndex(nearestGhost), DM.EUCLID);
+					game.getGhostCurrentNodeIndex(nearestGhost), DM.PATH);
 		}
 
 		nearestGhost = getNearestEdibleGhost(game, limit);
 		if (nearestGhost != null) {
+			System.out.println("Nearest ghost editable:" + nearestGhost);
 			return game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),
-					game.getGhostCurrentNodeIndex(nearestGhost), DM.EUCLID);
+					game.getGhostCurrentNodeIndex(nearestGhost), DM.PATH);
 		}
+		*/
 		
-		int nearestPill = getNearestPill(game, limit);
-		return game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), nearestPill, DM.EUCLID);
+		int nearestPill = getNearestPill(game);
+		System.out.println("Nearest pill editable: " + nearestPill + " PacMan position: " + game.getPacmanCurrentNodeIndex());
+		MOVE move = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), nearestPill, DM.PATH);
+		System.out.println("Move: " + move);
+		return  move;
 	}
 
 	private GHOST getNearestChasingGhost(Game game, int limit) {
@@ -61,28 +70,36 @@ public class MsPacMan extends PacmanController {
 		return nearestGhost;
 	}
 
-	private int getNearestPill(Game game, int limit) {
+	private int getNearestPill(Game game) {
 		int nearestPill = 0; // could be pill or power pill
-		int nearestDistance = limit;
-
+		double nearestDistance = Double.MAX_VALUE;
+		ArrayList<Double> a = new ArrayList();
 		// checking if the nearest pill is of type pill
 		for (int pill : game.getPillIndices()) {
-			int distance = Math.abs(game.getPillIndex(pill) - game.getPacmanCurrentNodeIndex());
-			if (distance < nearestDistance) {
-				nearestPill = pill;
-				nearestDistance = distance;
+			if(game.isPillStillAvailable(game.getPillIndex(pill))) {
+				double distance = game.getDistance(game.getPacmanCurrentNodeIndex(), game.getPillIndex(pill), DM.PATH);
+				a.add(distance);
+				if (distance < nearestDistance) {
+					nearestPill = game.getPillIndex(pill);
+					nearestDistance = distance;
+				}
+				
 			}
 		}
-
+		
+		//a.forEach(e -> System.out.println(e + ","));
+		/*
 		// checking if the nearest pill is of type power pill
 		for (int pill : game.getPowerPillIndices()) {
-			int distance = Math.abs(game.getPowerPillIndex(pill) - game.getPacmanCurrentNodeIndex());
-			if (distance < nearestDistance) {
-				nearestPill = pill;
-				nearestDistance = distance;
+			if(game.isPowerPillStillAvailable(pill)) {
+				double distance = game.getDistance(game.getPacmanCurrentNodeIndex(), pill, DM.PATH);
+				if (distance <= nearestDistance) {
+					nearestPill = pill;
+					nearestDistance = distance;
+				}
 			}
 		}
-
+		*/
 		return nearestPill;
 	}
 }

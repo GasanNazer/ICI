@@ -25,7 +25,6 @@ public class Ghosts extends GhostController {
 					moves.put(ghostType, game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghostType), game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType), DM.EUCLID));
 				else {
 					double randAux = rnd.nextFloat();
-					System.out.println(randAux);
 					if(randAux < 0.9)
 						moves.put(ghostType, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghostType), game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType), DM.EUCLID));
 					else
