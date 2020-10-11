@@ -25,7 +25,6 @@ public class Ghosts extends GhostController {
 					moves.put(ghostType, game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghostType), game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType), DM.EUCLID));
 				else {
 					double randAux = rnd.nextFloat();
-					System.out.println(randAux);
 					if(randAux < 0.9)
 						moves.put(ghostType, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghostType), game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType), DM.EUCLID));
 					else
@@ -37,18 +36,7 @@ public class Ghosts extends GhostController {
 	}
 	
 	private boolean isCloseToPill(Game game) {
-		boolean isClose = false;
-		
-		for(int i :game.getPowerPillIndices()) {
-			if(game.isPillStillAvailable(i)) {
-				if(game.getDistance(game.getPacmanCurrentNodeIndex(), i, DM.PATH) <= LIMIT) {
-					isClose = true;
-					break;
-				}
-			}
-		}
-		
-		return isClose;
+		return game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), game.getActivePowerPillsIndices(), DM.PATH) <= LIMIT;
 	}
 
 }
