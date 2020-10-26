@@ -22,31 +22,44 @@ public class Ghosts extends GhostController {
 		for (GHOST ghostType : GHOST.values()) {
 			if (game.doesGhostRequireAction(ghostType)) {
 
-				// old code p0
 				if (game.isGhostEdible(ghostType) || isCloseToPill(game)) {
-					int ghost_time = game.getGhostEdibleTime(ghostType);
+					int ghostTime = game.getGhostEdibleTime(ghostType);
 
-					if (ghost_time < 200) {
-						//System.out.println(ghostType.name());
-						//System.out.println(ghostType.name() + " editable time: " + ghost_time);
+					int distanceToPacman = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghostType),
+							game.getPacmanCurrentNodeIndex());
+
+					//System.out.println("Distance to Pacman: " + distanceToPacman);
+					//System.out.println(ghostType.name());
+					//System.out.println(ghostType.name() + " editable time: " + ghostTime);
+
+					if (ghostTime < 100 && distanceToPacman < 100) {
+						// System.out.println(ghostType.name());
+						// System.out.println(ghostType.name() + " editable time: " + ghostTime);
 						moves.put(ghostType,
-								game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghostType),
+								game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghostType),
 										game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType),
 										DM.EUCLID));
+						for (GHOST ghostType2 : GHOST.values()) {
+							if (!ghostType2.equals(ghostType)) {
+								moves.put(ghostType2, game.getApproximateNextMoveAwayFromTarget(
+										game.getGhostCurrentNodeIndex(ghostType2), game.getGhostCurrentNodeIndex(ghostType),
+										game.getGhostLastMoveMade(ghostType2), DM.EUCLID));
+							}
+						}
 					} else
 						moves.put(ghostType,
 								game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghostType),
 										game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType),
 										DM.EUCLID));
 				} else {
-					double randAux = rnd.nextFloat();
-					if (randAux < 0.9)
+					//double randAux = rnd.nextFloat();
+					//if (randAux < 0.9)
 						moves.put(ghostType,
 								game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghostType),
 										game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType),
 										DM.EUCLID));
-					else
-						moves.put(ghostType, allMoves[rnd.nextInt(allMoves.length)]);
+						//else
+						//moves.put(ghostType, allMoves[rnd.nextInt(allMoves.length)]);
 				}
 
 			}
