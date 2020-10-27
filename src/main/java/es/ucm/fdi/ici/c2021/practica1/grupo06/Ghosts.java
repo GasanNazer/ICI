@@ -47,9 +47,9 @@ public class Ghosts extends GhostController {
                      //FIN PARTE ANASS
                      	if (ghostTime < 100 && distanceToPacman < 100) {
                      		
-                     		if(ghostnear) {;//hacer acorralamiento 
+                     		/*if(ghostnear) {;//hacer acorralamiento 
                      		}else {}
-                     		}
+                     		}*/
 						// System.out.println(ghostType.name());
 						// System.out.println(ghostType.name() + " editable time: " + ghostTime);
 						moves.put(ghostType,
