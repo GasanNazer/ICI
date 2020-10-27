@@ -15,6 +15,9 @@ public class Ghosts extends GhostController {
 	private MOVE[] allMoves = MOVE.values();
 	private Random rnd = new Random();
 	private final static int LIMIT = 15;
+	private final static int GHOST_EATABLE_TIME_LIMIT = 100;
+	private final static int DISTANCE_TO_PACMAN = 100;
+	
 
 	@Override
 	public EnumMap<GHOST, MOVE> getMove(Game game, long timeDue) {
@@ -33,6 +36,7 @@ public class Ghosts extends GhostController {
 					//System.out.println(ghostType.name());
 					//System.out.println(ghostType.name() + " editable time: " + ghostTime);
 					//Parte aNASS
+					/*
                      int distanceToPill=game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghostType),
                     		 game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(),
                       				game.getActivePowerPillsIndices(), DM.PATH));
@@ -43,9 +47,9 @@ public class Ghosts extends GhostController {
  			                      				game.getActivePowerPillsIndices(), DM.PATH), game.getGhostLastMoveMade(ghostType),
  										DM.EUCLID));
                      }
-                     
+                     */
                      //FIN PARTE ANASS
-                     	if (ghostTime < 100 && distanceToPacman < 100) {
+                     	if (ghostTime < GHOST_EATABLE_TIME_LIMIT && distanceToPacman < DISTANCE_TO_PACMAN) {
                      		
                      		/*if(ghostnear) {;//hacer acorralamiento 
                      		}else {}
