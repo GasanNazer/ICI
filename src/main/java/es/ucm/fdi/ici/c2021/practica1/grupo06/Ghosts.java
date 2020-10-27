@@ -19,6 +19,7 @@ public class Ghosts extends GhostController {
 	@Override
 	public EnumMap<GHOST, MOVE> getMove(Game game, long timeDue) {
 		moves.clear();
+		boolean ghostnear=false;
 		for (GHOST ghostType : GHOST.values()) {
 			if (game.doesGhostRequireAction(ghostType)) {
 
@@ -31,8 +32,24 @@ public class Ghosts extends GhostController {
 					//System.out.println("Distance to Pacman: " + distanceToPacman);
 					//System.out.println(ghostType.name());
 					//System.out.println(ghostType.name() + " editable time: " + ghostTime);
-
-					if (ghostTime < 100 && distanceToPacman < 100) {
+					//Parte aNASS
+                     int distanceToPill=game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghostType),
+                    		 game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(),
+                      				game.getActivePowerPillsIndices(), DM.PATH));
+                     if(distanceToPill<distanceToPacman) {
+                    	 moves.put(ghostType,
+ 								game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghostType),
+ 										game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(),
+ 			                      				game.getActivePowerPillsIndices(), DM.PATH), game.getGhostLastMoveMade(ghostType),
+ 										DM.EUCLID));
+                     }
+                     
+                     //FIN PARTE ANASS
+                     	if (ghostTime < 100 && distanceToPacman < 100) {
+                     		
+                     		if(ghostnear) {;//hacer acorralamiento 
+                     		}else {}
+                     		}
 						// System.out.println(ghostType.name());
 						// System.out.println(ghostType.name() + " editable time: " + ghostTime);
 						moves.put(ghostType,
@@ -46,6 +63,8 @@ public class Ghosts extends GhostController {
 										game.getGhostLastMoveMade(ghostType2), DM.EUCLID));
 							}
 						}
+						ghostnear=true;
+
 					} else
 						moves.put(ghostType,
 								game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghostType),
