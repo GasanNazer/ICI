@@ -2,7 +2,6 @@ package es.ucm.fdi.ici.c2021.practica1.grupo06;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import pacman.controllers.PacmanController;
 import pacman.game.Constants.DM;
@@ -11,9 +10,9 @@ import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
 public class MsPacMan extends PacmanController {
-	int limit = 40;
-	int eadibleLimit = 60;
-	int powerPillLimit = 20;
+	int limit = 30;
+	int eadibleLimit = 80;
+	int powerPillLimit = 30;
 
 	@Override
 	public MOVE getMove(Game game, long timeDue) {
@@ -35,13 +34,18 @@ public class MsPacMan extends PacmanController {
 
 	private MOVE nextMove(Game game) {
 		MOVE[] moves = game.getPossibleMoves(game.getPacmanCurrentNodeIndex(), game.getPacmanLastMoveMade());
+		if(moves.length == 1)
+			return moves[0];
+		
 		HashSet<MOVE> forbiddenMoves = new HashSet<MOVE>();
 		for (GHOST ghostType : GHOST.values()) {
 
 			try {
 				if (!game.isGhostEdible(ghostType) && game.getDistance(game.getPacmanCurrentNodeIndex(),
 						game.getGhostCurrentNodeIndex(ghostType), game.getPacmanLastMoveMade(), DM.PATH) < limit) {
-					forbiddenMoves.add(game.getGhostLastMoveMade(ghostType).opposite());
+					MOVE ghostMove = game.getMoveToMakeToReachDirectNeighbour(game.getPacmanCurrentNodeIndex(), game.getShortestPath(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghostType), game.getPacmanLastMoveMade())[0]);
+					if(ghostMove != null)
+						forbiddenMoves.add(ghostMove.opposite());
 				}
 			} catch (ArrayIndexOutOfBoundsException e) {
 
@@ -51,12 +55,21 @@ public class MsPacMan extends PacmanController {
 		if (forbiddenMoves.size() == 1)
 			return game.getNextMoveAwayFromTarget(game.getPacmanCurrentNodeIndex(),
 					game.getGhostCurrentNodeIndex(getNearestChasingGhost(game)), DM.PATH);
+		
 		MOVE nextMove = moves[0];
-		for (MOVE m : moves) {
-			if (!forbiddenMoves.contains(m)) {
-				nextMove = m;
-				break;
+		int distanceToPills = game.getShortestPathDistance(game.getNeighbour(game.getPacmanCurrentNodeIndex(), moves[0]), game.getClosestNodeIndexFromNodeIndex(game.getNeighbour(game.getPacmanCurrentNodeIndex(), moves[0]), game.getActivePillsIndices(), DM.PATH), moves[0]);
+		for(int i = 1; i < moves.length; i++) {
+			if (!forbiddenMoves.contains(moves[i])) {
+				int newDistance = game.getShortestPathDistance(game.getNeighbour(game.getPacmanCurrentNodeIndex(), moves[i]), game.getClosestNodeIndexFromNodeIndex(game.getNeighbour(game.getPacmanCurrentNodeIndex(), moves[i]), game.getActivePillsIndices(), DM.PATH), moves[i]);
+				if(newDistance < distanceToPills) {
+					nextMove = moves[i];
+					distanceToPills = newDistance;
+				}
 			}
+		}
+		
+		for (MOVE m : moves) {
+			
 		}
 		return nextMove;
 	}
@@ -66,7 +79,7 @@ public class MsPacMan extends PacmanController {
 		GHOST nearestGhost = null;
 
 		for (GHOST ghostType : GHOST.values()) {
-			if (game.getGhostEdibleTime(ghostType) == 0 && game.getGhostLairTime(ghostType) == 0
+			if (game.getGhostEdibleTime(ghostType) < 50 && game.getGhostLairTime(ghostType) == 0
 					&& !game.isGhostEdible(ghostType)) {
 				int ghostNode = game.getGhostCurrentNodeIndex(ghostType);
 				if (game.getShortestPathDistance(pacManNode, ghostNode, game.getPacmanLastMoveMade()) < limit) {
@@ -79,7 +92,7 @@ public class MsPacMan extends PacmanController {
 	}
 
 	private GHOST getNearestEdibleGhost(Game game) {
-		int minDistance = limit;
+		int minDistance = eadibleLimit;
 		int pacManNode = game.getPacmanCurrentNodeIndex();
 		GHOST nearestGhost = null;
 		ArrayList<GHOST>[] nearestGhostsNum = new ArrayList[4];
@@ -111,7 +124,6 @@ public class MsPacMan extends PacmanController {
 			nearestGhost = nearestGhostsNum[indexMax].get(0);
 
 		return nearestGhost;
-
 	}
 
 	private int getNearestPill(Game game) {
