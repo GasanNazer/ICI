@@ -43,7 +43,7 @@ public class MsPacMan extends PacmanController {
 			try {
 				if (!game.isGhostEdible(ghostType) && game.getDistance(game.getPacmanCurrentNodeIndex(),
 						game.getGhostCurrentNodeIndex(ghostType), game.getPacmanLastMoveMade(), DM.PATH) < limit) {
-					MOVE ghostMove = game.getMoveToMakeToReachDirectNeighbour(game.getPacmanCurrentNodeIndex(), game.getShortestPath(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghostType), game.getPacmanLastMoveMade())[0]);
+					MOVE ghostMove = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghostType), game.getPacmanLastMoveMade(), DM.PATH);
 					if(ghostMove != null)
 						forbiddenMoves.add(ghostMove.opposite());
 				}
@@ -66,10 +66,6 @@ public class MsPacMan extends PacmanController {
 					distanceToPills = newDistance;
 				}
 			}
-		}
-		
-		for (MOVE m : moves) {
-			
 		}
 		return nextMove;
 	}
