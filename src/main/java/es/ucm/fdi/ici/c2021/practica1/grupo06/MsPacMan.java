@@ -47,7 +47,7 @@ public class MsPacMan extends PacmanController {
 					if(ghostMove != null)
 						forbiddenMoves.add(ghostMove.opposite());
 				}
-			} catch (ArrayIndexOutOfBoundsException e) {
+			} catch (Exception e) {
 
 			}
 
