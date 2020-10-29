@@ -18,47 +18,128 @@ public class Ghosts extends GhostController {
 	@Override
 	public EnumMap<GHOST, MOVE> getMove(Game game, long timeDue) {
 		moves.clear();
-		for (GHOST ghostType : GHOST.values()) {
-			if (game.doesGhostRequireAction(ghostType)) {
 
-				if (game.isGhostEdible(ghostType) || isCloseToPill(game)) {
-					int ghostTime = game.getGhostEdibleTime(ghostType);
+		GHOST first = GHOST.PINKY;
 
-					int distanceToPacman = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghostType),
-							game.getPacmanCurrentNodeIndex());
+		//moveOneGhost(first, moves, game);
+		moveOneGhostV3(first, first, moves, game);
 
-					if (ghostTime < GHOST_EATABLE_TIME_LIMIT && distanceToPacman < DISTANCE_TO_PACMAN) {
-						moves.put(ghostType,
-								game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghostType),
-										game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType),
-										DM.EUCLID));
+		GHOST second = GHOST.INKY;
 
-						for (GHOST ghostType2 : GHOST.values()) {
-							if (!ghostType2.equals(ghostType)) {
-								moves.put(ghostType2,
-										game.getApproximateNextMoveAwayFromTarget(
-												game.getGhostCurrentNodeIndex(ghostType2),
-												game.getGhostCurrentNodeIndex(ghostType),
-												game.getGhostLastMoveMade(ghostType2), DM.EUCLID));
-							}
-						}
-					} else
-						moves.put(ghostType,
-								game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghostType),
-										game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType),
-										DM.EUCLID));
+		//getAwayFromGhost(second, first, moves, game);
+		moveOneGhostV3(second, first, moves, game);
 
-				} else {
+		GHOST third = GHOST.BLINKY;
+		//moveOneGhost(third, moves, game);
+		moveOneGhostV2(third, first, moves, game);
+		
+		
+		GHOST fourth = GHOST.SUE;
+		//moveOneGhost(fourth, moves, game);
+		//moveOneGhostV2(fourth, third, moves, game);
+		moveOneGhostV2(fourth, third, moves, game);
+		
+		
+
+		/*
+		 * for (GHOST ghostType : GHOST.values()) { if(!ghostType.equals(first) &&
+		 * !ghostType.equals(second)) if (game.doesGhostRequireAction(ghostType)) {
+		 * 
+		 * if (game.isGhostEdible(ghostType) || isCloseToPill(game)) { int ghostTime =
+		 * game.getGhostEdibleTime(ghostType);
+		 * 
+		 * int distanceToPacman =
+		 * game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghostType),
+		 * game.getPacmanCurrentNodeIndex());
+		 * 
+		 * 
+		 * if (ghostTime < GHOST_EATABLE_TIME_LIMIT && distanceToPacman <
+		 * DISTANCE_TO_PACMAN) { moves.put(ghostType,
+		 * game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(
+		 * ghostType), game.getPacmanCurrentNodeIndex(),
+		 * game.getGhostLastMoveMade(ghostType), DM.EUCLID)); } else
+		 * moves.put(ghostType,
+		 * game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(
+		 * ghostType), game.getPacmanCurrentNodeIndex(),
+		 * game.getGhostLastMoveMade(ghostType), DM.EUCLID));
+		 * 
+		 * MOVE moveToPackman =
+		 * game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(
+		 * ghostType), game.getPacmanCurrentNodeIndex(),
+		 * game.getGhostLastMoveMade(ghostType), DM.PATH);
+		 * 
+		 * MOVE moveToPinky =
+		 * game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(
+		 * ghostType), game.getGhostCurrentNodeIndex(first),
+		 * game.getGhostLastMoveMade(ghostType), DM.PATH);
+		 * if(moveToPackman.equals(moveToPinky)) { moves.put(ghostType,
+		 * moveToPackman.opposite()); } else { moves.put(ghostType, moveToPinky); }
+		 * 
+		 * } else { moves.put(ghostType,
+		 * game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(
+		 * ghostType), game.getPacmanCurrentNodeIndex(),
+		 * game.getGhostLastMoveMade(ghostType), DM.PATH)); } first = ghostType; } }
+		 */
+		return moves;
+	}
+	
+	private void moveOneGhostV3(GHOST ghostType, GHOST first, EnumMap<GHOST, MOVE> moves, Game game) {
+		if (game.doesGhostRequireAction(ghostType)) {
+			if (game.isGhostEdible(ghostType) || isCloseToPill(game)) {
+				int ghostTime = game.getGhostEdibleTime(ghostType);
+
+				int distanceToPacman = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghostType),
+						game.getPacmanCurrentNodeIndex());
+
+				if (ghostTime < GHOST_EATABLE_TIME_LIMIT && distanceToPacman < DISTANCE_TO_PACMAN) {
 					moves.put(ghostType,
 							game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghostType),
 									game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType), DM.EUCLID));
-				}
-
+				} else
+					moves.put(ghostType,
+							game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghostType),
+									game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType), DM.EUCLID));
+			} else {
+				moves.put(ghostType, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghostType),
+						game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType), DM.PATH));
 			}
 		}
-		return moves;
 	}
 
+	private void moveOneGhostV2(GHOST ghostType, GHOST first, EnumMap<GHOST, MOVE> moves, Game game) {
+		if (game.doesGhostRequireAction(ghostType)) {
+			if (game.isGhostEdible(ghostType) || isCloseToPill(game)) {
+				int ghostTime = game.getGhostEdibleTime(ghostType);
+
+				int distanceToPacman = game.getShortestPathDistance(game.getGhostCurrentNodeIndex(ghostType),
+						game.getPacmanCurrentNodeIndex());
+
+				if (ghostTime < GHOST_EATABLE_TIME_LIMIT && distanceToPacman < DISTANCE_TO_PACMAN) {
+					moves.put(ghostType,
+							game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghostType),
+									game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType), DM.EUCLID));
+				} else
+					moves.put(ghostType,
+							game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghostType),
+									game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType), DM.EUCLID));
+
+				MOVE moveToPackman = game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghostType),
+						game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType), DM.PATH);
+
+				MOVE moveToPinky = game.getApproximateNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghostType),
+						game.getGhostCurrentNodeIndex(first), game.getGhostLastMoveMade(ghostType), DM.PATH);
+				if (moveToPackman.equals(moveToPinky)) {
+					moves.put(ghostType, moveToPackman.opposite());
+				} else {
+					moves.put(ghostType, moveToPinky);
+				}
+			} else {
+				moves.put(ghostType, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghostType),
+						game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghostType), DM.PATH));
+			}
+		}
+	}
+	
 	private boolean isCloseToPill(Game game) {
 		return game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(),
 				game.getActivePowerPillsIndices(), DM.PATH) <= LIMIT;
