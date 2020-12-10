@@ -1,4 +1,4 @@
-package es.ucm.fdi.ici.practica3.demorules;
+package es.ucm.fdi.ici.c2021.practica3.grupo06;
 import pacman.Executor;
 import pacman.controllers.GhostController;
 import pacman.controllers.HumanController;
@@ -14,11 +14,11 @@ public class ExecutorTest {
                 .setGhostPO(false)
                 .setPacmanPO(false)
                 .setVisual(true)
-                .setScaleFactor(3.0)
+                .setScaleFactor(2.0)
                 .build();
 
         PacmanController pacMan = new HumanController(new KeyBoardInput());
-        GhostController ghosts = new es.ucm.fdi.ici.practica3.demorules.GhostsRules();
+        GhostController ghosts = new es.ucm.fdi.ici.c2021.practica3.grupo06.Ghosts();
         
         System.out.println( 
         		executor.runGame(pacMan, ghosts, 40)
