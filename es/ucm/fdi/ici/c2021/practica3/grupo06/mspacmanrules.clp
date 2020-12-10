@@ -10,7 +10,7 @@
 (deftemplate GHOSTS
 	(slot edible (type SYMBOL))
 	(slot lessTime (type SYMBOL)))
-	
+
 	
 ;DEFINITION OF THE ACTION FACT
 (deftemplate ACTION

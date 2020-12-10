@@ -135,6 +135,7 @@ public class MsPacManInput extends Input {
 	@Override
 	public Collection<String> getFacts() {
 		Vector<String> facts = new Vector<String>();
+<<<<<<< HEAD
 		facts.add(String.format("(GHOSTS (edible %s))", (this.BLINKYedible || this.INKYedible || this.PINKYedible || this.SUEedible))); 
 		facts.add(String.format("(GHOSTS (lessTime %s))", (getNearestGhostEdibleTime() < TIME || 
 				(!this.isBLINKYedible() && !this.isINKYedible() && !this.isPINKYedible() && !this.isSUEedible()))));
@@ -142,6 +143,15 @@ public class MsPacManInput extends Input {
 		facts.add(String.format("(MSPACMAN (junction %s))", this.isPacManInJunction() && getNearestChasingGhost() != null && !getForbiddenMoves().contains(game.getPacmanLastMoveMade())));
 		facts.add(String.format("(MSPACMAN (nearGPP %s))", (getNearestGhost() != null && getMinPacmanDistancePPill() < thresold)));
 		facts.add(String.format("(MSPACMAN (nearG %s))", getNearestGhost() != null && getMinPacmanDistancePPill() < thresold));
+=======
+		facts.add(String.format("(AtLeastOneGhostEdible (edible %s))", (this.BLINKYedible || this.INKYedible || this.PINKYedible || this.SUEedible))); 
+		facts.add(String.format("(LessTimeToEatGhosts (lessTime %s))", (getNearestGhostEdibleTime() < TIME || 
+				(!this.isBLINKYedible() && !this.isINKYedible() && !this.isPINKYedible() && !this.isSUEedible()))));
+		facts.add(String.format("(PacManFarFromGhost (far %s))", this.getNearestGhost() == null));
+		facts.add(String.format("(PacManInJunction (junction %s))", this.isPacManInJunction() && getNearestChasingGhost() != null && !getForbiddenMoves().contains(game.getPacmanLastMoveMade())));
+		facts.add(String.format("(PacManNearGhostAndPowerPill (nearGPP %s))", (getNearestGhost() != null && getMinPacmanDistancePPill() < thresold)));
+		facts.add(String.format("(PacManNearGhost (nearG %s))", getNearestGhost() != null && getMinPacmanDistancePPill() < thresold));
+>>>>>>> ccb6d2e12b4ebf3b89cd8079d30aa87050c7e9e9
 		
 		return facts;
 	}
