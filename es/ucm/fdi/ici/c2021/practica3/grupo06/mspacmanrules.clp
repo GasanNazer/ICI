@@ -26,7 +26,7 @@
 (defrule RunAwayFromClosestGhosts
 (GHOSTS (lessTime true)) 
 	=>  
-	(assert (ACTION (id RunAwayFromClosestGhosts) (info "run towar ghosts --> run away from ghosts") )))
+	(assert (ACTION (id RunAwayFromClosestGhosts) (info "run towards ghosts --> run away from ghosts") )))
 
 (defrule RunAwayFromClosestGhosts
 (MSPACMAN (nearG true)) 
