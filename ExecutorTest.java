@@ -17,7 +17,7 @@ public class ExecutorTest {
                 .build();
 
         PacmanController pacMan = new HumanController(new KeyBoardInput());
-        GhostController ghosts = new es.ucm.fdi.ici.practica3.demorules.GhostsRules();
+        GhostController ghosts = new es.ucm.fdi.ici.c2021.practica3.grupo06.Ghosts();
         
         System.out.println( 
         		executor.runGame(pacMan, ghosts, 40)
