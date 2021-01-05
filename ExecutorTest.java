@@ -1,6 +1,6 @@
 
 
-import es.ucm.fdi.ici.practica4.demofuzzy.MsPacManFuzzy;
+import es.ucm.fdi.ici.c2021.practica4.grupo06.MsPacManFuzzy;
 import pacman.Executor;
 import pacman.controllers.GhostController;
 import pacman.controllers.PacmanController;

@@ -1,11 +1,11 @@
-package es.ucm.fdi.ici.practica4.demofuzzy;
+package es.ucm.fdi.ici.c2021.practica4.grupo06;
 
 import java.util.HashMap;
 
+import es.ucm.fdi.ici.c2021.practica4.grupo06.actions.GoToPPillAction;
+import es.ucm.fdi.ici.c2021.practica4.grupo06.actions.RunAwayAction;
 import es.ucm.fdi.ici.fuzzy.Action;
 import es.ucm.fdi.ici.fuzzy.ActionSelector;
-import es.ucm.fdi.ici.practica4.demofuzzy.actions.GoToPPillAction;
-import es.ucm.fdi.ici.practica4.demofuzzy.actions.RunAwayAction;
 
 public class MsPacManActionSelector implements ActionSelector {
 

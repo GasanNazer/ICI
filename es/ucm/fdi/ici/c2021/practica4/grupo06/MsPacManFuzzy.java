@@ -1,4 +1,4 @@
-package es.ucm.fdi.ici.practica4.demofuzzy;
+package es.ucm.fdi.ici.c2021.practica4.grupo06;
 
 import es.ucm.fdi.ici.fuzzy.ActionSelector;
 import es.ucm.fdi.ici.fuzzy.FuzzyEngine;
@@ -9,7 +9,7 @@ import pacman.game.Game;
 
 public class MsPacManFuzzy extends PacmanController {
 
-	private static final String RULES_PATH = "es\\ucm\\fdi\\ici\\practica4\\demofuzzy\\";
+	private static final String RULES_PATH = "es\\ucm\\fdi\\ici\\c2021\\practica4\\grupo06\\";
 	FuzzyEngine fuzzyEngine;
 	MsPacManInput input ;
 	
