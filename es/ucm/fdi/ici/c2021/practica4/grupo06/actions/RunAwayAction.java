@@ -4,6 +4,8 @@ package es.ucm.fdi.ici.c2021.practica4.grupo06.actions;
 import java.util.Random;
 
 import es.ucm.fdi.ici.fuzzy.Action;
+import pacman.game.Constants.DM;
+import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
@@ -16,7 +18,9 @@ public class RunAwayAction implements Action {
 	
 	@Override
 	public MOVE execute(Game game) {
-		return allMoves[rnd.nextInt(allMoves.length)];
+		//return allMoves[rnd.nextInt(allMoves.length)];
+		return game.getApproximateNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),
+				game.getGhostCurrentNodeIndex(GHOST.PINKY), game.getPacmanLastMoveMade(), DM.PATH);
     }
             
 }
