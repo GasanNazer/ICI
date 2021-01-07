@@ -16,13 +16,18 @@ public class GoToYourPartOfTheMapAction implements Action {
 	@Override
 	public MOVE execute(Game game) {
 		if (game.doesGhostRequireAction(ghost)) {
-			MOVE m = game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
-			MOVE m2 = game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPowerPillIndices()[ghost.ordinal()], DM.PATH);
-			
-			if(m.equals(m2))
-				return game.getNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), DM.PATH);
-			else
-				return m2;
+			try {
+				MOVE m = game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(ghost), DM.PATH);
+				MOVE m2 = game.getNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(ghost), game.getPowerPillIndices()[ghost.ordinal()], DM.PATH);
+				
+				if(m.equals(m2))
+					return game.getNextMoveAwayFromTarget(game.getGhostCurrentNodeIndex(ghost), game.getPacmanCurrentNodeIndex(), DM.PATH);
+				else
+					return m2;
+			}
+			catch(Exception e) {
+				return MOVE.NEUTRAL;
+			}
 		}
 
 		return MOVE.NEUTRAL;

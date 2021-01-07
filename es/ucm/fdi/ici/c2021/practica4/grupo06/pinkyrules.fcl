@@ -1,4 +1,4 @@
-FUNCTION_BLOCK FuzzyGhosts
+FUNCTION_BLOCK PINKY
 
 VAR_INPUT				// Define input variables
 	BLINKYedible : REAL;
