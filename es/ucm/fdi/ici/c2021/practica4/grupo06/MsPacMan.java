@@ -18,6 +18,7 @@ public class MsPacMan extends PacmanController {
 		ActionSelector actionSelector = new MsPacManActionSelector();
 		input = new MsPacManInput();
 		 
+		/*
 		ConsoleFuzzyEngineObserver observer = new ConsoleFuzzyEngineObserver("MsPacMan","MsPacManRules");
 		ConsoleFuzzyEngineObserver observer2 = new ConsoleFuzzyEngineObserver("MsPacMan","MsPacManBlinkyRunAway");
 		ConsoleFuzzyEngineObserver observer3 = new ConsoleFuzzyEngineObserver("MsPacMan","MsPacManPinkyRunAway");
@@ -26,7 +27,10 @@ public class MsPacMan extends PacmanController {
 		
 		ConsoleFuzzyEngineObserver observer6 = new ConsoleFuzzyEngineObserver("MsPacMan","MsPacManRulesConsume");
 
+		*/
+		
 		fuzzyEngine = new FuzzyEngine("MsPacMan",RULES_PATH+"mspacman.fcl","FuzzyMsPacMan",actionSelector);
+		/*
 		fuzzyEngine.addObserver(observer);
 		fuzzyEngine.addObserver(observer2);
 		fuzzyEngine.addObserver(observer3);
@@ -34,6 +38,7 @@ public class MsPacMan extends PacmanController {
 		fuzzyEngine.addObserver(observer5);
 		
 		fuzzyEngine.addObserver(observer6);
+		*/
 	}
 	
 	
