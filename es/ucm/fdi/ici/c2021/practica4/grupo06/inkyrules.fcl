@@ -1,0 +1,123 @@
+FUNCTION_BLOCK FuzzyGhosts
+
+VAR_INPUT				// Define input variables
+	BLINKYedible : REAL;
+	PINKYedible : REAL;
+	INKYedible : REAL;
+	SUEedible : REAL;
+	BLINKYdistToClosestGhost : REAL;
+	PINKYdistToClosestGhost : REAL;
+	INKYdistToClosestGhost : REAL;
+	SUEdistToClosestGhost : REAL;
+	BLINKYdistToMsPacMan : REAL;
+	PINKYdistToMsPacMan : REAL;
+	INKYdistToMsPacMan : REAL;
+	SUEdistToMsPacMan : REAL;
+	distancePacManToPPill : REAL;
+END_VAR
+
+VAR_OUTPUT				// Define output variable
+	runAwayFromClosestGhost: REAL;
+	runAwayFromPacMan : REAL;
+	chase: REAL;
+	goToYourPartOfMap: REAL;
+END_VAR
+
+FUZZIFY INKYedible			
+	TERM edible :=  (0, 0) (1, 1); 
+	TERM notEdible :=  (0, 1) (1, 0); 
+END_FUZZIFY
+
+FUZZIFY INKYdistToClosestGhost		
+	TERM near := (0, 1) (40, 0) ; 
+	TERM medium := gauss 55 25;
+	TERM far := (70, 0) (150, 1) (200, 1);
+END_FUZZIFY
+
+FUZZIFY INKYdistToMsPacMan	
+	TERM near := (0, 1) (30, 0) ; 
+	TERM medium := gauss 50 25;
+	TERM far := (60, 0) (100, 1) (200, 1);
+END_FUZZIFY
+
+FUZZIFY distancePacManToPPill	
+	TERM near := (0, 1) (30, 0) ; 
+	TERM medium := gauss 50 25;
+	TERM far := (60, 0) (100, 1) (200, 1);
+END_FUZZIFY
+
+DEFUZZIFY runAwayFromClosestGhost			// Defzzzify output variable 'tip' : {'cheap', 'average', 'generous' }
+	TERM calm := (0,1) (5,1) (15,0);
+	TERM nervious := gauss 15 5;
+	TERM emergency := (15,0) (25,1) (30,1);
+	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
+	DEFAULT := 0;		// Default value is 0 (if no rule activates defuzzifier)
+END_DEFUZZIFY
+
+DEFUZZIFY runAwayFromPacMan			// Defzzzify output variable 'tip' : {'cheap', 'average', 'generous' }
+	TERM calm := (0,1) (5,1) (15,0);
+	TERM nervious := gauss 15 5;
+	TERM emergency := (15,0) (25,1) (30,1);
+	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
+	DEFAULT := 0;		// Default value is 0 (if no rule activates defuzzifier)
+END_DEFUZZIFY
+
+DEFUZZIFY chase			// Defzzzify output variable 'tip' : {'cheap', 'average', 'generous' }
+	TERM calm := (0,1) (5,1) (15,0);
+	TERM nervious := gauss 15 5;
+	TERM emergency := (15,0) (25,1) (30,1);
+	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
+	DEFAULT := 0;		// Default value is 0 (if no rule activates defuzzifier)
+END_DEFUZZIFY
+
+DEFUZZIFY goToYourPartOfMap			// Defzzzify output variable 'tip' : {'cheap', 'average', 'generous' }
+	TERM calm := (0,1) (5,1) (15,0);
+	TERM nervious := gauss 15 5;
+	TERM emergency := (15,0) (25,1) (30,1);
+	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
+	DEFAULT := 0;		// Default value is 0 (if no rule activates defuzzifier)
+END_DEFUZZIFY
+
+RULEBLOCK runAwayFromPacMan
+	AND : MIN;			// Use 'min' for 'and' (also implicit use 'max' for 'or' to fulfill DeMorgan's Law)
+	ACT : MIN;			// Use 'min' activation method
+	ACCU : MAX;			// Use 'MAX' accumulation method (Other options PROBOR and SUM)
+	
+	RULE 1 : IF INKYedible IS edible AND INKYdistToMsPacMan IS near THEN runAwayFromPacMan IS emergency;
+	RULE 2 : IF INKYedible IS edible AND INKYdistToMsPacMan IS medium THEN runAwayFromPacMan IS nervious;
+	RULE 3 : IF INKYdistToMsPacMan IS far THEN runAwayFromPacMan IS calm;
+	RULE 4 : IF INKYedible IS notEdible THEN runAwayFromPacMan IS calm;
+END_RULEBLOCK
+
+RULEBLOCK runAwayFromClosestGhost
+	AND : MIN;			// Use 'min' for 'and' (also implicit use 'max' for 'or' to fulfill DeMorgan's Law)
+	ACT : MIN;			// Use 'min' activation method
+	ACCU : MAX;			// Use 'MAX' accumulation method (Other options PROBOR and SUM)
+	
+	RULE 1 : IF INKYedible IS edible AND INKYdistToClosestGhost IS near THEN runAwayFromClosestGhost IS emergency;
+	RULE 2 : IF INKYedible IS edible AND INKYdistToClosestGhost IS medium THEN runAwayFromClosestGhost IS nervious;
+	RULE 3 : IF INKYedible IS notEdible THEN runAwayFromClosestGhost IS calm;
+END_RULEBLOCK
+
+RULEBLOCK chase
+	AND : MIN;			// Use 'min' for 'and' (also implicit use 'max' for 'or' to fulfill DeMorgan's Law)
+	ACT : MIN;			// Use 'min' activation method
+	ACCU : MAX;			// Use 'MAX' accumulation method (Other options PROBOR and SUM)
+	
+	RULE 1 : IF INKYedible IS notEdible AND distancePacManToPPill IS far THEN chase IS emergency;
+	RULE 2 : IF INKYedible IS notEdible AND distancePacManToPPill IS medium THEN chase IS nervious;
+	RULE 3 : IF INKYedible IS notEdible AND distancePacManToPPill IS near THEN chase IS calm;
+	RULE 4 : IF INKYedible IS edible THEN chase IS calm;
+END_RULEBLOCK
+
+RULEBLOCK goToYourPartOfMap
+	AND : MIN;			// Use 'min' for 'and' (also implicit use 'max' for 'or' to fulfill DeMorgan's Law)
+	ACT : MIN;			// Use 'min' activation method
+	ACCU : MAX;			// Use 'MAX' accumulation method (Other options PROBOR and SUM)
+	
+	RULE 1 : IF INKYedible IS notEdible AND INKYdistToMsPacMan IS far THEN goToYourPartOfMap IS emergency;
+	RULE 2 : IF INKYedible IS notEdible AND distancePacManToPPill IS near THEN goToYourPartOfMap IS emergency;
+	RULE 3 : IF INKYedible IS notEdible AND INKYdistToMsPacMan IS near THEN goToYourPartOfMap IS calm;
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK
