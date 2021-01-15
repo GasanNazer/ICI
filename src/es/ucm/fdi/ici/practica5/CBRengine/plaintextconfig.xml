@@ -1,5 +1,5 @@
 <TextFileConfiguration>
-	<FilePath>src\\es\\ucm\\fdi\\ici\\practica5\\data\\generalcasebase.txt</FilePath>
+	<FilePath>es/ucm/fdi/ici/practica5/data/generalcasebase.txt</FilePath>
 	<Delimiters>,</Delimiters>
 	<DescriptionClassName>es.ucm.fdi.ici.practica5.CBRengine.MsPacManDescription</DescriptionClassName>
 	<DescriptionMappings>
