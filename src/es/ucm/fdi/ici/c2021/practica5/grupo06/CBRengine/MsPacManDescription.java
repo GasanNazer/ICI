@@ -62,7 +62,6 @@ public class MsPacManDescription implements CaseComponent {
 		this.time = time;
 	}
 
-	@Override
 	public Attribute getIdAttribute() {
 		return new Attribute("id", MsPacManDescription.class);
 	}
