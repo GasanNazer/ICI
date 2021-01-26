@@ -1,9 +1,9 @@
+import es.ucm.fdi.ici.c2021.practica5.grupo06.Ghosts;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.MsPacMan;
 
 import pacman.Executor;
 import pacman.controllers.GhostController;
 import pacman.controllers.PacmanController;
-
 
 public class ExecutorTest {
 
@@ -17,8 +17,8 @@ public class ExecutorTest {
                 .setScaleFactor(2.0)
                 .build();
 
-        PacmanController pacMan = new MsPacMan();
-        GhostController ghosts = new AggressiveGhosts();
+        PacmanController pacMan = new PacManRandom();//new MsPacMan();
+        GhostController ghosts = new Ghosts();//new AggressiveGhosts();
       
         
         System.out.println( 
