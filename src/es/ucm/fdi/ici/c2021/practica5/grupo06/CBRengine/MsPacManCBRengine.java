@@ -1,6 +1,7 @@
 package es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import es.ucm.fdi.gaia.jcolibri.cbraplications.StandardCBRApplication;
@@ -20,7 +21,6 @@ import es.ucm.fdi.gaia.jcolibri.method.retrieve.selection.SelectCases;
 import es.ucm.fdi.gaia.jcolibri.util.FileIO;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.Action;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.MsPacManActionSelector;
-
 public class MsPacManCBRengine implements StandardCBRApplication {
 
 	private String casebaseFile;
@@ -34,7 +34,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	
 	
 	
-	final static String CONNECTOR_FILE_PATH = "es/ucm/fdi/ici/practica5/CBRengine/plaintextconfig.xml"; //Cuidado!! poner el grupo aquí
+	final static String CONNECTOR_FILE_PATH = "es\\ucm\\fdi\\ici\\c2021\\practica5\\grupo06\\CBRengine\\plaintextconfig.xml"; //Cuidado!! poner el grupo aquí
 
 	/**
 	 * Simple extension to allow custom case base files. It also creates a new empty file if it does not exist.
@@ -77,10 +77,14 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		simConfig.setDescriptionSimFunction(new Average());
 		simConfig.addMapping(new Attribute("score",MsPacManDescription.class), new Interval(15000));
 		simConfig.addMapping(new Attribute("time",MsPacManDescription.class), new Interval(4000));
+		simConfig.addMapping(new Attribute("timeEdibleLeft",MsPacManDescription.class), new Interval(4000));
 		simConfig.addMapping(new Attribute("nearestPPill",MsPacManDescription.class), new Interval(650));
-		simConfig.addMapping(new Attribute("nearestGhost",MsPacManDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("nearestPill",MsPacManDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("nearestNonEdibleGhostDist",MsPacManDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("nearestEdibleGhostDist",MsPacManDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("leftPills",MsPacManDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("leftPPills",MsPacManDescription.class), new Interval(650));
 		simConfig.addMapping(new Attribute("edibleGhost",MsPacManDescription.class), new Equal());
-		
 	}
 
 	@Override
@@ -100,6 +104,12 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			// This simple implementation only uses 1NN
 			// Consider using kNNs with majority voting
 			RetrievalResult first = SelectCases.selectTopKRR(eval, 1).iterator().next();
+			
+			//TODO implementation of majority voting
+			//Collection<RetrievalResult> first = SelectCases.selectTopKRR(eval, 5);
+			
+			
+			
 			CBRCase mostSimilarCase = first.get_case();
 			double similarity = first.getEval();
 	
