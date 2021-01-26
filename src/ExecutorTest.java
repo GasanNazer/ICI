@@ -17,7 +17,7 @@ public class ExecutorTest {
                 .setScaleFactor(2.0)
                 .build();
 
-        PacmanController pacMan = new PacManRandom();//new MsPacMan();
+        PacmanController pacMan = new MsPacMan();
         GhostController ghosts = new Ghosts();//new AggressiveGhosts();
       
         
