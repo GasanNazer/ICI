@@ -1,5 +1,4 @@
 package es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine;
-
 import java.util.Vector;
 
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRCase;
@@ -46,9 +45,17 @@ public class MsPacManStorageManager {
 		int oldScore = description.getScore();
 		int currentScore = game.getScore();
 		int resultValue = currentScore - oldScore;
+		
+		int oldTime = description.getTime();
+		int currentTime = game.getTotalTime();
+		int resultValueTime = currentTime - oldTime;
+		
 		MsPacManResult result = (MsPacManResult)bCase.getResult();
 		result.setScore(resultValue);
-		
+		result.setTime(resultValueTime);
+		result.setLevel(game.getCurrentLevel());
+		result.setEatenPills(description.getLeftPills() - game.getActivePillsIndices().length);
+		result.setEatenPills(description.getLeftPPills() - game.getActivePowerPillsIndices().length);
 		//Store the old case right now into the case base
 		//Alternatively we could store all them when game finishes in close() method
 		StoreCasesMethod.storeCase(this.caseBase, bCase);

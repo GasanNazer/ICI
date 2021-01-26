@@ -7,6 +7,10 @@ public class MsPacManResult implements CaseComponent, Cloneable {
 
 	Integer id;
 	Integer score;
+	Integer time;
+	Integer level;
+	Integer eatenPills;
+	Integer eatenPPills;
 	
 	public Integer getId() {
 		return id;
@@ -24,6 +28,39 @@ public class MsPacManResult implements CaseComponent, Cloneable {
 		this.score = score;
 	}
 
+	public Integer getTime() {
+		return time;
+	}
+
+	public void setTime(Integer time) {
+		this.time = time;
+	}
+
+	public Integer getLevel() {
+		return level;
+	}
+
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
+
+	public Integer getEatenPills() {
+		return eatenPills;
+	}
+
+	public void setEatenPills(Integer eatenPills) {
+		this.eatenPills = eatenPills;
+	}
+
+	public Integer getEatenPPills() {
+		return eatenPPills;
+	}
+
+	public void setEatenPPills(Integer eatenPPills) {
+		this.eatenPPills = eatenPPills;
+	} 
+	
+	
 	@Override
 	public Attribute getIdAttribute() {
 		return new Attribute("id", MsPacManResult.class);
@@ -36,9 +73,8 @@ public class MsPacManResult implements CaseComponent, Cloneable {
 
 	@Override
 	public String toString() {
-		return "MsPacManResult [id=" + id + ", score=" + score + "]";
-	} 
-	
-	
+		return "MsPacManResult [id=" + id + ", score=" + score + ", time=" + time
+				+ ", level=" + level + ", eatenPills=" + eatenPills + ", eatenPPills=" + eatenPPills + "]";
+	}
 
 }

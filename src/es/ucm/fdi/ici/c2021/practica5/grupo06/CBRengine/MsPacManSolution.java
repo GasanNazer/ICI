@@ -34,6 +34,4 @@ public class MsPacManSolution implements CaseComponent, Cloneable {
 		return "MsPacManSolution [id=" + id + ", action=" + action + "]";
 	}  
 	
-	
-	
 }

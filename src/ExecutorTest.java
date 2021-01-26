@@ -1,5 +1,6 @@
 import es.ucm.fdi.ici.c2021.practica5.grupo06.Ghosts;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.MsPacMan;
+
 import pacman.Executor;
 import pacman.controllers.GhostController;
 import pacman.controllers.PacmanController;

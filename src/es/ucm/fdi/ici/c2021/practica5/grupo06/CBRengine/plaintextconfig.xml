@@ -7,8 +7,13 @@
 		<Map>score</Map>
 		<Map>time</Map>
 		<Map>nearestPPill</Map>		
-		<Map>nearestGhost</Map>		
-		<Map>edibleGhost</Map>		
+		<Map>nearestPill</Map>	
+		<Map>nearestNonEdibleGhostDist</Map>		
+		<Map>nearestEdibleGhostDist</Map>	
+		<Map>edibleGhost</Map>	
+		<Map>timeEdibleLeft</Map>
+		<Map>leftPills</Map>
+		<Map>leftPPills</Map>	
 	</DescriptionMappings>
 	<SolutionClassName>es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.MsPacManSolution</SolutionClassName>
 	<SolutionMappings>
@@ -19,5 +24,9 @@
 	<ResultMappings>
 		<Map>id</Map>
 		<Map>score</Map>
+		<Map>time</Map>
+		<Map>level</Map>
+		<Map>eatenPills</Map>
+		<Map>eatenPPills</Map>
 	</ResultMappings>
 </TextFileConfiguration>
