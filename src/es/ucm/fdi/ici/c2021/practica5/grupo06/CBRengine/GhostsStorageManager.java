@@ -52,6 +52,7 @@ public class GhostsStorageManager {
 		//Store the old case right now into the case base
 		//Alternatively we could store all them when game finishes in close() method
 		StoreCasesMethod.storeCase(this.caseBase, bCase);
+		
 	}
 
 	public void close() {

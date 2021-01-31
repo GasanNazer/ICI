@@ -2,19 +2,20 @@ package es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import es.ucm.fdi.gaia.jcolibri.cbraplications.StandardCBRApplication;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRCase;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRCaseBase;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRQuery;
+import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
 import es.ucm.fdi.gaia.jcolibri.connector.PlainTextConnector;
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNConfig;
-import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNScoringMethod;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.global.Average;
-import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.Equal;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.Interval;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.selection.SelectCases;
 import es.ucm.fdi.gaia.jcolibri.util.FileIO;
@@ -76,15 +77,25 @@ public class GhostsCBRengine implements StandardCBRApplication {
 
 		simConfig = new NNConfig();
 		simConfig.setDescriptionSimFunction(new Average());
+		
+		simConfig.addMapping(new Attribute("distanceToNearestPowerPillBlinky", GhostsDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToNearestPowerPillPinky", GhostsDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToNearestPowerPillInky", GhostsDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToNearestPowerPillSue", GhostsDescription.class), new Interval(650));
+		
+		// include all other attributes
+		
 		simConfig.addMapping(new Attribute("score", GhostsDescription.class), new Interval(15000));
 		simConfig.addMapping(new Attribute("time", GhostsDescription.class), new Interval(4000));
+		
 		simConfig.addMapping(new Attribute("distanceToNearestPowerPillPacMan", GhostsDescription.class),
 				new Interval(650));
 		simConfig.addMapping(new Attribute("positionOfNearestPowerPillPacMan", GhostsDescription.class),
 				new Interval(650));
 		simConfig.addMapping(new Attribute("distanceNearestGhostToPacMan", GhostsDescription.class), new Interval(650));
 		simConfig.addMapping(new Attribute("numberOfPowerPillsLeft", GhostsDescription.class), new Interval(650));
-
+		
+		
 	}
 
 	@Override
@@ -99,8 +110,10 @@ public class GhostsCBRengine implements StandardCBRApplication {
 			this.action = actionSelector.findAction();
 		} else {
 			// Compute NN
-			Collection<RetrievalResult> eval = NNScoringMethod.evaluateSimilarity(caseBase.getCases(), query,
-					simConfig);
+			// Collection<RetrievalResult> eval =
+			// NNScoringMethod.evaluateSimilarity(caseBase.getCases(), query,
+			// simConfig);
+			Collection<RetrievalResult> eval = customNN(caseBase.getCases(), query);
 
 			// This simple implementation only uses 1NN
 			// Consider using kNNs with majority voting
@@ -154,6 +167,48 @@ public class GhostsCBRengine implements StandardCBRApplication {
 	public void postCycle() throws ExecutionException {
 		this.storageManager.close();
 		this.caseBase.close();
+	}
+
+	private Collection<RetrievalResult> customNN(Collection<CBRCase> cases, CBRQuery query) {
+
+		// Parallel stream
+
+		List<RetrievalResult> res = cases.parallelStream()
+
+				.map(c -> new RetrievalResult(c, computeSimilarity(query.getDescription(), c.getDescription())))
+
+				.collect(Collectors.toList());
+
+		// Sort the result
+
+		res.sort(RetrievalResult::compareTo);
+
+		return res;
+
+	}
+
+	private Double computeSimilarity(CaseComponent description, CaseComponent description2) {
+
+		GhostsDescription _query = (GhostsDescription) description;
+
+		GhostsDescription _case = (GhostsDescription) description2;
+
+		double simil = 0;
+
+		simil += Math.abs(_query.getScore() - _case.getScore()) / 150000;
+
+		simil += Math.abs(_query.getTime() - _case.getTime()) / 4000;
+
+		/*
+		simil += Math.abs(_query.getNearestPPill() - _case.getNearestPPill()) / 650;
+
+		simil += Math.abs(_query.getNearestGhost() - _case.getNearestGhost()) / 650;
+
+		simil += _query.getEdibleGhost().equals(_case.getEdibleGhost()) ? 1.0 : 0.0;
+
+		*/
+		return simil / 5.0;
+
 	}
 
 }

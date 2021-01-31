@@ -16,6 +16,12 @@ public class GhostsInput implements Input {
 	HashMap<GHOST, Boolean> ghostEdible = new HashMap<GHOST, Boolean>();
 	Integer distanceToNearestPowerPillPacMan;
 	Integer positionOfNearestPowerPillPacMan;
+	/* BLINKY(40, "Blinky"),
+    PINKY(60, "Pinky"),
+    INKY(80, "Inky"),
+    SUE(100, "Sue");
+    0-> initial value
+    */
 	GHOST nearestGhostToPacMan;
 	Integer distanceNearestGhostToPacMan;
 	HashMap<GHOST, Integer> distanceToNearestGhost = new HashMap<GHOST, Integer>();
@@ -29,7 +35,7 @@ public class GhostsInput implements Input {
 	HashMap<GHOST, GHOST> nearestNoEdibleGhost = new HashMap<GHOST, GHOST>();
 	// if the value is -1 the ghost is not edible
 	HashMap<GHOST, Integer> edibleTimeLeft = new HashMap<GHOST, Integer>();
-	// left-0,right-1, up-2, down-3
+	// left-0,right-1, up-2, down-3, neutral-4
 	HashMap<GHOST, Integer> directionLastMove = new HashMap<GHOST, Integer>();
 	Integer numberOfPowerPillsLeft;
 	Integer score;
@@ -61,30 +67,95 @@ public class GhostsInput implements Input {
 	@Override
 	public CBRQuery getQuery() {
 		GhostsDescription description = new GhostsDescription();
+		
+		for(GHOST ghost : GHOST.values()) {
+			Integer distance = this.distanceToNearestPowerPill.get(ghost);
+			Integer distancePacman = this.distanceToPacman.get(ghost);
+			Boolean ghostEdible = this.ghostEdible.get(ghost);
+			Integer distanceNearestGhost = this.distanceToNearestGhost.get(ghost);
+			Integer distanceNearestEdibleGhost = this.distanceToNearestEdibleGhost.get(ghost);
+			Integer distanceToNearestNoEdibleGhost = this.distanceToNearestNoEdibleGhost.get(ghost);
+			Integer edibleTime = this.edibleTimeLeft.get(ghost);
+			Integer move = this.directionLastMove.get(ghost);
+			switch (ghost) {
+			case BLINKY:
+				description.setDistanceToNearestPowerPillBlinky(distance);
+				description.setDistanceToPacmanBlinky(distancePacman);
+				description.setGhostEdibleBlinky(ghostEdible);
+				description.setDistanceToNearestGhostBlinky(distanceNearestGhost);
+				description.setDistanceToNearestEdibleGhostBlinky(distanceNearestEdibleGhost);
+				description.setDistanceToNearestNoEdibleGhostBlinky(distanceToNearestNoEdibleGhost);
+				description.setEdibleTimeLeftBlinky(edibleTime);
+				description.setDirectionLastMoveBlinky(move);
+				break;
+			case PINKY:
+				description.setDistanceToNearestPowerPillPinky(distance);
+				description.setDistanceToPacmanPinky(distancePacman);
+				description.setGhostEdiblePinky(ghostEdible);
+				description.setDistanceToNearestGhostPinky(distanceNearestGhost);
+				description.setDistanceToNearestEdibleGhostPinky(distanceNearestEdibleGhost);
+				description.setDistanceToNearestNoEdibleGhostPinky(distanceToNearestNoEdibleGhost);
+				description.setEdibleTimeLeftPinky(edibleTime);
+				description.setDirectionLastMovePinky(move);
+				break;
+			case INKY:
+				description.setDistanceToNearestPowerPillInky(distance);
+				description.setDistanceToPacmanInky(distancePacman);
+				description.setGhostEdibleInky(ghostEdible);
+				description.setDistanceToNearestGhostInky(distanceNearestGhost);
+				description.setDistanceToNearestEdibleGhostInky(distanceNearestEdibleGhost);
+				description.setDistanceToNearestNoEdibleGhostInky(distanceToNearestNoEdibleGhost);
+				description.setEdibleTimeLeftInky(edibleTime);
+				description.setDirectionLastMovePinky(move);
+				break;
+			case SUE:
+				description.setDistanceToNearestPowerPillSue(distance);
+				description.setDistanceToPacmanSue(distancePacman);
+				description.setGhostEdibleSue(ghostEdible);
+				description.setDistanceToNearestGhostSue(distanceNearestGhost);
+				description.setDistanceToNearestEdibleGhostSue(distanceNearestEdibleGhost);
+				description.setDistanceToNearestNoEdibleGhostSue(distanceToNearestNoEdibleGhost);
+				description.setEdibleTimeLeftSue(edibleTime);
+				description.setDirectionLastMoveSue(move);
+				break;
+			}
+		}
+		
 		/*
-		description.setDistanceToNearestPowerPill(distanceToNearestPowerPill);
-		description.setPositionOfNearestPowerPill(positionOfNearestPowerPill);
-		description.setDistanceToPacman(distanceToPacman);;
-		description.setGhostEdible(ghostEdible);
+		description.setPositionOfNearestPowerPill(positionOfNearestPowerPill); Is it really needed?
 		*/
+		
 		description.setDistanceToNearestPowerPillPacMan(distanceToNearestPowerPillPacMan);
 		description.setPositionOfNearestPowerPillPacMan(positionOfNearestPowerPillPacMan);
-		//description.setNearestGhostToPacMan(nearestGhostToPacMan);
+		
+		int nearestGhostPacMan = 0;
+		switch(this.nearestGhostToPacMan) {
+		case BLINKY:
+			nearestGhostPacMan = 40;
+			break;
+		case PINKY:
+			nearestGhostPacMan = 60;
+			break;
+		case INKY:
+			nearestGhostPacMan = 80;
+			break;
+		case SUE:
+			nearestGhostPacMan = 100;
+			break;
+		}
+		description.setNearestGhostToPacMan(nearestGhostPacMan);
 		description.setDistanceNearestGhostToPacMan(distanceNearestGhostToPacMan);
-		/*
-		description.setDistanceToNearestGhost(distanceToNearestGhost);
-		description.setPositionOfNearestGhost(positionOfNearestGhost);
-		description.setNearestGhost(nearestGhost);
-		description.setDistanceToNearestEdibleGhost(distanceToNearestEdibleGhost);
-		description.setPositionOfNearestEdibleGhost(positionOfNearestEdibleGhost);
-		description.setNearestEdibleGhost(nearestEdibleGhost);
-		description.setDistanceToNearestNoEdibleGhost(distanceToNearestNoEdibleGhost);
-		description.setPositionOfNearestNoEdibleGhost(positionOfNearestNoEdibleGhost);
-		description.setNearestNoEdibleGhost(nearestNoEdibleGhost);
-		description.setEdibleTimeLeft(edibleTimeLeft);
-		description.setDirectionLastMove(directionLastMove);
-		*/
+		
+		
+		//description.setPositionOfNearestGhost(positionOfNearestGhost); Is it really needed?
+		//description.setNearestGhost(nearestGhost); Is it really needed?
+		//description.setPositionOfNearestEdibleGhost(positionOfNearestEdibleGhost);  Is it really needed?
+		//description.setNearestEdibleGhost(nearestEdibleGhost);  Is it really needed?
+		//description.setPositionOfNearestNoEdibleGhost(positionOfNearestNoEdibleGhost); Is it really needed?
+		//description.setNearestNoEdibleGhost(nearestNoEdibleGhost); Is it really needed?
+		
 		description.setNumberOfPowerPillsLeft(numberOfPowerPillsLeft);
+	
 		description.setScore(score);
 		description.setTime(time);
 		
@@ -201,6 +272,9 @@ public class GhostsInput implements Input {
 			break;
 		case DOWN:
 			this.directionLastMove.put(ghost, 3);
+			break;
+		default:
+			this.directionLastMove.put(ghost, 4);
 			break;
 		}
 	}
