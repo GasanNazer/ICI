@@ -3,33 +3,57 @@
 	<Delimiters>,</Delimiters>
 	<DescriptionClassName>es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.GhostsDescription</DescriptionClassName>
 	<DescriptionMappings>
+		<Map>distanceToNearestPowerPillBlinky</Map>
+		<Map>distanceToNearestPowerPillPinky</Map>
+		<Map>distanceToNearestPowerPillInky</Map>
+		<Map>distanceToNearestPowerPillSue</Map>
+		
+		<Map>distanceToPacmanBlinky</Map>
+		<Map>distanceToPacmanPinky</Map>
+		<Map>distanceToPacmanInky</Map>
+		<Map>distanceToPacmanSue</Map>
+		
+		<Map>ghostEdibleBlinky</Map>
+		<Map>ghostEdiblePinky</Map>
+		<Map>ghostEdibleInky</Map>
+		<Map>ghostEdibleSue</Map>
+		
+		<Map>distanceToNearestPowerPillPacMan</Map>
+		<Map>positionOfNearestPowerPillPacMan</Map>
+		<Map>nearestGhostToPacMan</Map>
+		<Map>distanceNearestGhostToPacMan</Map>
+		
+		<Map>distanceToNearestGhostBlinky</Map>
+		<Map>distanceToNearestGhostPinky</Map>
+		<Map>distanceToNearestGhostInky</Map>
+		<Map>distanceToNearestGhostSue</Map>
+		
+		<Map>distanceToNearestEdibleGhostBlinky</Map>
+		<Map>distanceToNearestEdibleGhostPinky</Map>
+		<Map>distanceToNearestEdibleGhostInky</Map>
+		<Map>distanceToNearestEdibleGhostSue</Map>
+		
+		<Map>distanceToNearestNoEdibleGhostBlinky</Map>
+		<Map>distanceToNearestNoEdibleGhostPinky</Map>
+		<Map>distanceToNearestNoEdibleGhostInky</Map>
+		<Map>distanceToNearestNoEdibleGhostSue</Map>
+		
+		<Map>edibleTimeLeftBlinky</Map>
+		<Map>edibleTimeLeftPinky</Map>
+		<Map>edibleTimeLeftInky</Map>
+		<Map>edibleTimeLeftSue</Map>
+		
+		<Map>directionLastMoveBlinky</Map>
+		<Map>directionLastMovePinky</Map>
+		<Map>directionLastMoveInky</Map>
+		<Map>directionLastMoveSue</Map>
+		
+		<Map>numberOfPowerPillsLeft</Map>	
+		
 		<Map>id</Map>
 		<Map>score</Map>
 		<Map>time</Map>	
-		<!--  
-		<Map>distanceToNearestPowerPill</Map>
-		<Map>positionOfNearestPowerPill</Map>
-		<Map>distanceToPacman</Map>
-		<Map>ghostEdible</Map>
-		-->
-		<Map>distanceToNearestPowerPillPacMan</Map>
-		<Map>positionOfNearestPowerPillPacMan</Map>
-		<Map>distanceNearestGhostToPacMan</Map>
-		<!--  
-		<Map>nearestGhostToPacMan</Map>
-		<Map>distanceToNearestGhost</Map>
-		<Map>positionOfNearestGhost</Map>
-		<Map>nearestGhost</Map>
-		<Map>distanceToNearestEdibleGhost</Map>
-		<Map>positionOfNearestEdibleGhost</Map>
-		<Map>nearestEdibleGhost</Map>
-		<Map>distanceToNearestNoEdibleGhost</Map>
-		<Map>positionOfNearestNoEdibleGhost</Map>
-		<Map>nearestNoEdibleGhost</Map>
-		<Map>edibleTimeLeft</Map>
-		<Map>directionLastMove</Map>
-		-->
-		<Map>numberOfPowerPillsLeft</Map>	
+		
 	</DescriptionMappings>
 	<SolutionClassName>es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.GhostsSolution</SolutionClassName>
 	<SolutionMappings>

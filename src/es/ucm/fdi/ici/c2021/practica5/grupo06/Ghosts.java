@@ -7,9 +7,11 @@ import java.util.List;
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.GhostsCBRengine;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.GhostsStorageManager;
+import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.ChasePacManAction;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.GoToPPillAction;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.GoToPacmanStartingPointAction;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.RunAwayAction;
+import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.RunAwayFromPacManAction;
 import pacman.controllers.GhostController;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
@@ -28,9 +30,17 @@ public class Ghosts extends GhostController {
 		this.input = new GhostsInput();
 
 		List<Action> actions = new ArrayList<Action>();
-		//TODO include other actions
-		actions.add(new GoToPPillAction());
-		actions.add(new RunAwayAction());
+		
+		//new actions
+		actions.add(new ChasePacManAction(GHOST.BLINKY));
+		actions.add(new ChasePacManAction(GHOST.PINKY));
+		actions.add(new ChasePacManAction(GHOST.INKY));
+		actions.add(new ChasePacManAction(GHOST.SUE));
+		
+		actions.add(new RunAwayFromPacManAction(GHOST.BLINKY));
+		actions.add(new RunAwayFromPacManAction(GHOST.PINKY));
+		actions.add(new RunAwayFromPacManAction(GHOST.INKY));
+		actions.add(new RunAwayFromPacManAction(GHOST.SUE));
 		
 		this.actionSelector = new GhostsActionSelector(actions);
 		this.storageManager = new GhostsStorageManager();

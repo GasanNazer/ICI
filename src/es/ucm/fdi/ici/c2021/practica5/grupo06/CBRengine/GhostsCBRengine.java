@@ -16,6 +16,7 @@ import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNConfig;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.global.Average;
+import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.Equal;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.Interval;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.selection.SelectCases;
 import es.ucm.fdi.gaia.jcolibri.util.FileIO;
@@ -77,25 +78,65 @@ public class GhostsCBRengine implements StandardCBRApplication {
 
 		simConfig = new NNConfig();
 		simConfig.setDescriptionSimFunction(new Average());
+
+		simConfig.addMapping(new Attribute("distanceToNearestPowerPillBlinky", GhostsDescription.class),
+				new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToNearestPowerPillPinky", GhostsDescription.class),
+				new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToNearestPowerPillInky", GhostsDescription.class),
+				new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToNearestPowerPillSue", GhostsDescription.class),
+				new Interval(650));
+
+		simConfig.addMapping(new Attribute("distanceToPacmanBlinky", GhostsDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToPacmanPinky", GhostsDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToPacmanInky", GhostsDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToPacmanSue", GhostsDescription.class), new Interval(650));
+
+		simConfig.addMapping(new Attribute("ghostEdibleBlinky", GhostsDescription.class), new Equal());
+		simConfig.addMapping(new Attribute("ghostEdiblePinky", GhostsDescription.class), new Equal());
+		simConfig.addMapping(new Attribute("ghostEdibleInky", GhostsDescription.class), new Equal());
+		simConfig.addMapping(new Attribute("ghostEdibleSue", GhostsDescription.class), new Equal());
+
+		simConfig.addMapping(new Attribute("distanceToNearestPowerPillPacMan", GhostsDescription.class),
+				new Interval(650));
+
+		simConfig.addMapping(new Attribute("positionOfNearestPowerPillPacMan", GhostsDescription.class),
+				new Interval(650));
+
+		simConfig.addMapping(new Attribute("nearestGhostToPacMan", GhostsDescription.class), new Interval(650));
+
+		simConfig.addMapping(new Attribute("distanceNearestGhostToPacMan", GhostsDescription.class), new Interval(650));
+
+		simConfig.addMapping(new Attribute("distanceToNearestGhostBlinky", GhostsDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToNearestGhostPinky", GhostsDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToNearestGhostInky", GhostsDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToNearestGhostSue", GhostsDescription.class), new Interval(650));
 		
-		simConfig.addMapping(new Attribute("distanceToNearestPowerPillBlinky", GhostsDescription.class), new Interval(650));
-		simConfig.addMapping(new Attribute("distanceToNearestPowerPillPinky", GhostsDescription.class), new Interval(650));
-		simConfig.addMapping(new Attribute("distanceToNearestPowerPillInky", GhostsDescription.class), new Interval(650));
-		simConfig.addMapping(new Attribute("distanceToNearestPowerPillSue", GhostsDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToNearestEdibleGhostBlinky", GhostsDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToNearestEdibleGhostPinky", GhostsDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToNearestEdibleGhostInky", GhostsDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToNearestEdibleGhostSue", GhostsDescription.class), new Interval(650));
 		
-		// include all other attributes
+		simConfig.addMapping(new Attribute("distanceToNearestNoEdibleGhostBlinky", GhostsDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToNearestNoEdibleGhostPinky", GhostsDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToNearestNoEdibleGhostInky", GhostsDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("distanceToNearestNoEdibleGhostSue", GhostsDescription.class), new Interval(650));
+		
+		simConfig.addMapping(new Attribute("edibleTimeLeftBlinky", GhostsDescription.class), new Interval(50));
+		simConfig.addMapping(new Attribute("edibleTimeLeftPinky", GhostsDescription.class), new Interval(50));
+		simConfig.addMapping(new Attribute("edibleTimeLeftInky", GhostsDescription.class), new Interval(50));
+		simConfig.addMapping(new Attribute("edibleTimeLeftSue", GhostsDescription.class), new Interval(50));
+		
+		simConfig.addMapping(new Attribute("directionLastMoveBlinky", GhostsDescription.class), new Interval(5));
+		simConfig.addMapping(new Attribute("directionLastMovePinky", GhostsDescription.class), new Interval(5));
+		simConfig.addMapping(new Attribute("directionLastMoveInky", GhostsDescription.class), new Interval(5));
+		simConfig.addMapping(new Attribute("directionLastMoveSue", GhostsDescription.class), new Interval(5));
+		
+		simConfig.addMapping(new Attribute("numberOfPowerPillsLeft", GhostsDescription.class), new Interval(650));
 		
 		simConfig.addMapping(new Attribute("score", GhostsDescription.class), new Interval(15000));
 		simConfig.addMapping(new Attribute("time", GhostsDescription.class), new Interval(4000));
-		
-		simConfig.addMapping(new Attribute("distanceToNearestPowerPillPacMan", GhostsDescription.class),
-				new Interval(650));
-		simConfig.addMapping(new Attribute("positionOfNearestPowerPillPacMan", GhostsDescription.class),
-				new Interval(650));
-		simConfig.addMapping(new Attribute("distanceNearestGhostToPacMan", GhostsDescription.class), new Interval(650));
-		simConfig.addMapping(new Attribute("numberOfPowerPillsLeft", GhostsDescription.class), new Interval(650));
-		
-		
 	}
 
 	@Override
@@ -200,13 +241,13 @@ public class GhostsCBRengine implements StandardCBRApplication {
 		simil += Math.abs(_query.getTime() - _case.getTime()) / 4000;
 
 		/*
-		simil += Math.abs(_query.getNearestPPill() - _case.getNearestPPill()) / 650;
-
-		simil += Math.abs(_query.getNearestGhost() - _case.getNearestGhost()) / 650;
-
-		simil += _query.getEdibleGhost().equals(_case.getEdibleGhost()) ? 1.0 : 0.0;
-
-		*/
+		 * simil += Math.abs(_query.getNearestPPill() - _case.getNearestPPill()) / 650;
+		 * 
+		 * simil += Math.abs(_query.getNearestGhost() - _case.getNearestGhost()) / 650;
+		 * 
+		 * simil += _query.getEdibleGhost().equals(_case.getEdibleGhost()) ? 1.0 : 0.0;
+		 * 
+		 */
 		return simil / 5.0;
 
 	}
