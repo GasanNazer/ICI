@@ -1,19 +1,20 @@
 package es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import es.ucm.fdi.gaia.jcolibri.cbraplications.StandardCBRApplication;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRCase;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRCaseBase;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRQuery;
+import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
 import es.ucm.fdi.gaia.jcolibri.connector.PlainTextConnector;
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNConfig;
-import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNScoringMethod;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.global.Average;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.Equal;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.Interval;
@@ -99,7 +100,8 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			this.action = actionSelector.findAction();
 		}else {
 			//Compute NN
-			Collection<RetrievalResult> eval = NNScoringMethod.evaluateSimilarity(caseBase.getCases(), query, simConfig);
+			//Collection<RetrievalResult> eval = NNScoringMethod.evaluateSimilarity(caseBase.getCases(), query, simConfig);
+			Collection<RetrievalResult> eval = customNN(caseBase.getCases(), query);
 			
 			// This simple implementation only uses 1NN
 			// Consider using kNNs with majority voting
@@ -160,6 +162,48 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	public void postCycle() throws ExecutionException {
 		this.storageManager.close();
 		this.caseBase.close();
+	}
+	
+	private Collection<RetrievalResult> customNN(Collection<CBRCase> cases, CBRQuery query) {
+
+		// Parallel stream
+
+		List<RetrievalResult> res = cases.parallelStream()
+
+				.map(c -> new RetrievalResult(c, computeSimilarity(query.getDescription(), c.getDescription())))
+
+				.collect(Collectors.toList());
+
+		// Sort the result
+
+		res.sort(RetrievalResult::compareTo);
+
+		return res;
+
+	}
+	
+	private Double computeSimilarity(CaseComponent description, CaseComponent description2) {
+
+		MsPacManDescription _query = (MsPacManDescription) description;
+
+		MsPacManDescription _case = (MsPacManDescription) description2;
+
+		double simil = 0;
+
+		simil += Math.abs(_query.getScore() - _case.getScore()) / 150000;
+
+		simil += Math.abs(_query.getTime() - _case.getTime()) / 4000;
+
+		/*
+		 * simil += Math.abs(_query.getNearestPPill() - _case.getNearestPPill()) / 650;
+		 * 
+		 * simil += Math.abs(_query.getNearestGhost() - _case.getNearestGhost()) / 650;
+		 * 
+		 * simil += _query.getEdibleGhost().equals(_case.getEdibleGhost()) ? 1.0 : 0.0;
+		 * 
+		 */
+		return simil / 5.0;
+
 	}
 
 }

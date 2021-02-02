@@ -1,5 +1,6 @@
 <TextFileConfiguration>
-	<FilePath>es\\ucm\\fdi\\ici\\c2021\\practica5\\grupo06\\data\\ghostsgeneralcasebase.txt</FilePath>
+	<!-- <FilePath>es\\ucm\\fdi\\ici\\c2021\\practica5\\grupo06\\data\\ghostsgeneralcasebase.txt</FilePath> -->
+	<FilePath>es/ucm/fdi/ici/c2021/practica5/grupo06/data/ghostsgeneralcasebase.txt</FilePath>
 	<Delimiters>,</Delimiters>
 	<DescriptionClassName>es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.GhostsDescription</DescriptionClassName>
 	<DescriptionMappings>
@@ -60,7 +61,7 @@
 		<Map>id</Map>
 		<Map>action</Map>
 	</SolutionMappings>
-	<ResultClassName>es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.GhostResult</ResultClassName>
+	<ResultClassName>es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.GhostsResult</ResultClassName>
 	<ResultMappings>
 		<Map>id</Map>
 		<Map>score</Map>

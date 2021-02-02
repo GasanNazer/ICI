@@ -24,7 +24,8 @@ public class Ghosts extends GhostController {
 	GhostsActionSelector actionSelector;
 	GhostsStorageManager storageManager;
 
-	final static String FILE_PATH = "src\\es\\ucm\\fdi\\ici\\c2021\\practica5\\grupo06\\data\\grupo06\\%s.csv"; // Cuidado!! poner el grupo aquí
+	//final static String FILE_PATH = "src\\es\\ucm\\fdi\\ici\\c2021\\practica5\\grupo06\\data\\grupo06\\%s.csv"; // Cuidado!! poner el grupo aquí
+	final static String FILE_PATH = "src/es/ucm/fdi/ici/c2021/practica5/grupo06/data/grupo06/%s.csv"; // Cuidado!! poner el grupo aquí
 
 	public Ghosts() {
 		this.input = new GhostsInput();
