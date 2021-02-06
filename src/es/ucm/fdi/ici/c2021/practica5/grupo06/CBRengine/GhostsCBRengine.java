@@ -34,12 +34,7 @@ public class GhostsCBRengine implements StandardCBRApplication {
 	CBRCaseBase caseBase;
 	NNConfig simConfig;
 
-	final static String CONNECTOR_FILE_PATH = "es\\ucm\\fdi\\ici\\c2021\\practica5\\grupo06\\CBRengine\\ghostsplaintextconfig.xml"; // Cuidado!!
-																																	// poner
-																																	// el
-																																	// grupo
-																																	// aquí
-
+	final static String CONNECTOR_FILE_PATH = "es/ucm/fdi/ici/c2021/practica5/grupo06/CBRengine/ghostsplaintextconfig.xml";
 	/**
 	 * Simple extension to allow custom case base files. It also creates a new empty
 	 * file if it does not exist.
@@ -148,7 +143,7 @@ public class GhostsCBRengine implements StandardCBRApplication {
 	@Override
 	public void cycle(CBRQuery query) throws ExecutionException {
 		if (caseBase.getCases().isEmpty()) {
-			this.action = actionSelector.findAction();
+			this.action = actionSelector.findAction(null);
 		} else {
 			// Compute NN
 			// Collection<RetrievalResult> eval =
@@ -167,12 +162,15 @@ public class GhostsCBRengine implements StandardCBRApplication {
 
 			// Now compute a solution for the query
 			this.action = actionSelector.getAction(solution.getAction());
+			
+			GhostsDescription selectedCaseDescription = (GhostsDescription)mostSimilarCase.getDescription();
+			
+			if (similarity < 0.7) {
+				this.action = actionSelector.findAction(selectedCaseDescription);
+			}
 
-			if (similarity < 0.7) // Sorry not enough similarity, ask actionSelector for an action
-				this.action = actionSelector.findAction();
-
-			else if (result.getScore() < 0) // This was a bad case, ask actionSelector for another one.
-				this.action = actionSelector.findAnotherAction(solution.getAction());
+			//else if (result.getScore() < 0) // This was a bad case, ask actionSelector for another one.
+			//	this.action = actionSelector.findAnotherAction(solution.getAction());
 		}
 		CBRCase newCase = createNewCase(query);
 		this.storageManager.storeCase(newCase);
@@ -239,6 +237,9 @@ public class GhostsCBRengine implements StandardCBRApplication {
 		simil += Math.abs(_query.getScore() - _case.getScore()) / 150000;
 
 		simil += Math.abs(_query.getTime() - _case.getTime()) / 4000;
+		
+				
+		//simil += Math.abs(_query.getDistanceToNearestPowerPillBlinky() - _query.getDistanceToNearestPowerPillBlinky())
 
 		/*
 		 * simil += Math.abs(_query.getNearestPPill() - _case.getNearestPPill()) / 650;

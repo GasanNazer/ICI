@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 
+import org.hibernate.boot.model.source.internal.hbm.AbstractSingularAttributeSourceEmbeddedImpl;
+
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.GhostsCBRengine;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.GhostsStorageManager;
@@ -73,25 +75,27 @@ public class Ghosts extends GhostController {
 	public EnumMap<GHOST, MOVE> getMove(Game game, long timeDue) {
 		EnumMap<GHOST, MOVE> result = new EnumMap<GHOST,MOVE>(GHOST.class);
 
-		for(GHOST g : GHOST.values()) {
+		for(GHOST ghost : GHOST.values()) {
 			// This implementation only computes a new action when MsPacMan is in a
 			// junction.
 			// This is relevant for the case storage policy
-			if (!game.isJunction(game.getGhostCurrentNodeIndex(g)))
-				result.put(g, MOVE.NEUTRAL);
+			if (!game.isJunction(game.getGhostCurrentNodeIndex(ghost)))
+				result.put(ghost, MOVE.NEUTRAL);
 
 			try {
 				input.parseInput(game);
-				actionSelector.setGame(game);
+				//actionSelector.setGame(game);
+				actionSelector.setGhost(ghost);
 				storageManager.setGame(game);
 				cbrEngine.cycle(input.getQuery());
 				Action action = cbrEngine.getSolution();
-				result.put(g, action.execute(game));
+				result.put(ghost, action.execute(game));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			result.put(g, MOVE.NEUTRAL);
 		}
+		
+		System.out.println(result.get(GHOST.BLINKY));
 		
 		return result;
 	}

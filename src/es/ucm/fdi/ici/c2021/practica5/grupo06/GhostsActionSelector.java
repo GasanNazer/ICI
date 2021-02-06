@@ -4,12 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.GhostsDescription;
+import pacman.game.Constants.GHOST;
 import pacman.game.Game;
 
 public class GhostsActionSelector {
 	HashMap<String, Action> map;
 	List<Action> actions;
 	Game game;
+	private GHOST ghost;
 
 	public GhostsActionSelector(List<Action> actions) {
 		this.map = new HashMap<String, Action>();
@@ -22,13 +25,36 @@ public class GhostsActionSelector {
 		this.game = game;
 	}
 
-	/**
-	 * Method called when the CBREngine is not able to find a suitable action.
-	 * Simplest implementation returns a random one.
-	 * 
-	 * @return
-	 */
-	public Action findAction() {
+	public Action findAction(GhostsDescription description) {
+		if (description != null) {
+			//System.out.println("Evaluate action: ");
+
+			// Blinky
+			if (this.ghost.equals(GHOST.BLINKY)) {
+				if (description.getGhostEdibleBlinky() && description.getDistanceToPacmanBlinky() < 50) {
+					//System.out.println("Select RUN Blinky");
+					return this.getAction("RunAwayFromPacManAction action " + GHOST.BLINKY);
+				}
+				if (!description.getGhostEdibleBlinky()) {
+					//System.out.println("Select aggresive Blinky");
+					return this.getAction("ChasePacMan action " + GHOST.BLINKY);
+				}
+			}
+
+			// Pinky
+			if (this.ghost.equals(GHOST.PINKY)) {
+				if (description.getGhostEdiblePinky() && description.getDistanceToPacmanPinky() < 50) {
+					//System.out.println("Select RUN Pinky");
+					return this.getAction("RunAwayFromPacManAction action " + GHOST.PINKY);
+				}
+				if (!description.getGhostEdiblePinky()) {
+					//System.out.println("Select aggresive Pinky");
+					return this.getAction("ChasePacMan action " + GHOST.PINKY);
+				}
+			}
+
+		}
+
 		int randomIndex = new Random().nextInt(actions.size());
 		return actions.get(randomIndex);
 	}
@@ -49,5 +75,9 @@ public class GhostsActionSelector {
 
 	public Action getAction(String action) {
 		return map.get(action);
+	}
+
+	public void setGhost(GHOST ghost) {
+		this.ghost = ghost;
 	}
 }
