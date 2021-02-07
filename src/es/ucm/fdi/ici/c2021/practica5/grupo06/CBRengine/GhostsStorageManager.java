@@ -48,7 +48,6 @@ public class GhostsStorageManager {
 		int resultValue = currentScore - oldScore;
 		GhostsResult result = (GhostsResult)bCase.getResult();
 		result.setScore(resultValue);
-		
 		//Store the old case right now into the case base
 		//Alternatively we could store all them when game finishes in close() method
 		StoreCasesMethod.storeCase(this.caseBase, bCase);

@@ -103,18 +103,17 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			//Compute NN
 			Collection<RetrievalResult> eval = customNN(caseBase.getCases(), query);
 			
-			// This simple implementation only uses 1NN
-			// Consider using kNNs with majority voting
-			//RetrievalResult first = SelectCases.selectTopKRR(eval, 1).iterator().next();
-			
 			//TODO implementation of majority voting
 			Collection<RetrievalResult> results = SelectCases.selectTopKRR(eval, 5);
 			
 			double similarity = 0;
+			double bestScore = 0;
 			CBRCase mostSimilarCase = null;
 			
 			for(RetrievalResult first : results) {
-				if(first.getEval() > similarity) {
+				MsPacManResult result2 = (MsPacManResult)first.get_case().getResult();
+				if(result2.getScore() > bestScore && first.getEval() >= 0.7){
+					bestScore = result2.getScore();
 					similarity = first.getEval();
 					mostSimilarCase = first.get_case();
 				}
@@ -202,21 +201,21 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		
 		simil += Math.abs(_query.getTimeEdibleLeft() - _case.getTimeEdibleLeft()) / 4000;
 
-		simil += Math.abs(_query.getNearestPPill() - _case.getNearestPPill()) / 650;
+		simil += 3 * (Math.abs(_query.getNearestPPill() - _case.getNearestPPill()) / 650);
 		
-		simil += Math.abs(_query.getNearestPill() - _case.getNearestPill()) / 650;
+		simil += 2 * (Math.abs(_query.getNearestPill() - _case.getNearestPill()) / 650);
 		
-		simil += Math.abs(_query.getNearestNonEdibleGhostDist() - _case.getNearestNonEdibleGhostDist()) / 650;
+		simil += 3 * (Math.abs(_query.getNearestNonEdibleGhostDist() - _case.getNearestNonEdibleGhostDist()) / 650);
 		
-		simil += Math.abs(_query.getNearestEdibleGhostDist() - _case.getNearestEdibleGhostDist()) / 650;
+		simil += 2 * (Math.abs(_query.getNearestEdibleGhostDist() - _case.getNearestEdibleGhostDist()) / 650);
 		
-		simil += Math.abs(_query.getLeftPPills() - _case.getLeftPPills()) / 4;
+		simil += 3 * (Math.abs(_query.getLeftPPills() - _case.getLeftPPills()) / 4);
 		
-		simil += Math.abs(_query.getLeftPills() - _case.getLeftPills()) / 230;
+		simil += 3 * (Math.abs(_query.getLeftPills() - _case.getLeftPills()) / 230);
 		
-		simil += _query.getEdibleGhost().equals(_case.getEdibleGhost()) ? 1.0 : 0.0;
+		simil += 2 * (_query.getEdibleGhost().equals(_case.getEdibleGhost()) ? 1.0 : 0.0);
 		
-		return simil / 10.0;
+		return simil / 21.0;
 
 	}
 
