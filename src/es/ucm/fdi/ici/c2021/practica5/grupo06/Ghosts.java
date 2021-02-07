@@ -74,23 +74,26 @@ public class Ghosts extends GhostController {
 			// This implementation only computes a new action when MsPacMan is in a
 			// junction.
 			// This is relevant for the case storage policy
-			if (!game.isJunction(game.getGhostCurrentNodeIndex(ghost)))
-				result.put(ghost, MOVE.NEUTRAL);
+			if(game.doesGhostRequireAction(ghost)) {
+				if (!game.isJunction(game.getGhostCurrentNodeIndex(ghost)))
+					result.put(ghost, MOVE.NEUTRAL);
 
-			try {
-				input.parseInput(game);
-				//actionSelector.setGame(game);
-				actionSelector.setGhost(ghost);
-				storageManager.setGame(game);
-				cbrEngine.cycle(input.getQuery());
-				Action action = cbrEngine.getSolution();
-				result.put(ghost, action.execute(game));
-			} catch (Exception e) {
-				e.printStackTrace();
+				try {
+					input.parseInput(game);
+					//actionSelector.setGame(game);
+					System.out.println("Ghost" + ghost);
+					actionSelector.setGhost(ghost);
+					storageManager.setGame(game);
+					cbrEngine.cycle(input.getQuery());
+					Action action = cbrEngine.getSolution();
+					result.put(ghost, action.execute(game));
+					System.out.println("Move: " + action.getActionId());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		
-		
+	
 		return result;
 	}
 

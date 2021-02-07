@@ -164,6 +164,8 @@ public class GhostsCBRengine implements StandardCBRApplication {
 			}
 			
 			GhostsSolution solution = (GhostsSolution) mostSimilarCase.getSolution();
+			
+			System.out.println("similarity: " + similarity);
 
 			// Now compute a solution for the query
 			this.action = actionSelector.getAction(solution.getAction());
@@ -173,6 +175,8 @@ public class GhostsCBRengine implements StandardCBRApplication {
 			if (similarity < 0.7) {
 				this.action = actionSelector.findAction(queryDescription);
 			}
+			
+			System.out.println("Action: " + this.action.getActionId());
 		}
 		CBRCase newCase = createNewCase(query);
 		this.storageManager.storeCase(newCase);
@@ -234,24 +238,34 @@ public class GhostsCBRengine implements StandardCBRApplication {
 
 		GhostsDescription _case = (GhostsDescription) description2;
 
-		double simil = 0;
+		double simil = 0.0;
 
-		simil += Math.abs(_query.getScore() - _case.getScore()) / 15000;
+		double calc = Math.abs(_query.getScore() - _case.getScore());
+		simil +=  calc / 15000;
 
-		simil += Math.abs(_query.getTime() - _case.getTime()) / 4000;
+		calc = Math.abs(_query.getTime() - _case.getTime());
+		simil +=  calc / 4000;
 		
 		
 		//distanceToPacman
-		simil += Math.abs(_query.getDistanceToPacmanBlinky() - _case.getDistanceToPacmanBlinky()) / 650;
-		simil += Math.abs(_query.getDistanceToPacmanPinky() - _case.getDistanceToPacmanPinky()) / 650;
-		simil += Math.abs(_query.getDistanceToPacmanInky() - _case.getDistanceToPacmanInky()) / 650;
-		simil += Math.abs(_query.getDistanceToPacmanSue() - _case.getDistanceToPacmanSue()) / 650;
+		calc = Math.abs(_query.getDistanceToPacmanBlinky() - _case.getDistanceToPacmanBlinky());
+		simil +=  calc / 650;
+		calc = Math.abs(_query.getDistanceToPacmanPinky() - _case.getDistanceToPacmanPinky());
+		simil += calc / 650;
+		calc = Math.abs(_query.getDistanceToPacmanInky() - _case.getDistanceToPacmanInky());
+		simil += calc / 650;
+		calc = Math.abs(_query.getDistanceToPacmanSue() - _case.getDistanceToPacmanSue());
+		simil += calc / 650;
 		
 		//edibleTimeLeft
-		simil += Math.abs(_query.getEdibleTimeLeftBlinky() - _case.getEdibleTimeLeftBlinky()) / 60;
-		simil += Math.abs(_query.getEdibleTimeLeftPinky() - _case.getEdibleTimeLeftPinky()) / 60;
-		simil += Math.abs(_query.getEdibleTimeLeftInky() - _case.getEdibleTimeLeftInky()) / 60;
-		simil += Math.abs(_query.getEdibleTimeLeftSue() - _case.getEdibleTimeLeftSue()) / 60;
+		calc = Math.abs(_query.getEdibleTimeLeftBlinky() - _case.getEdibleTimeLeftBlinky());
+		simil += calc / 60;
+		calc = Math.abs(_query.getEdibleTimeLeftPinky() - _case.getEdibleTimeLeftPinky());
+		simil += calc / 60;
+		calc = Math.abs(_query.getEdibleTimeLeftInky() - _case.getEdibleTimeLeftInky());
+		simil += calc / 60;
+		calc = Math.abs(_query.getEdibleTimeLeftSue() - _case.getEdibleTimeLeftSue());
+		simil += calc / 60;
 		
 		//ghostEdible
 		simil += _query.getGhostEdibleBlinky().equals(_case.getGhostEdibleBlinky()) ? 1.0 : 0.0;
@@ -260,9 +274,10 @@ public class GhostsCBRengine implements StandardCBRApplication {
 		simil += _query.getGhostEdibleSue().equals(_case.getGhostEdibleSue()) ? 1.0 : 0.0;
 		
 		// distancePacmanPP
-		simil += Math.abs(_query.getDistanceToNearestPowerPillPacMan() - _case.getDistanceToNearestPowerPillPacMan()) / 650;
+		calc = Math.abs(_query.getDistanceToNearestPowerPillPacMan() - _case.getDistanceToNearestPowerPillPacMan());
+		simil += calc / 650;
 
-		return simil / 15.0;
+		return 1.0 - (simil / 15.0);
 
 	}
 

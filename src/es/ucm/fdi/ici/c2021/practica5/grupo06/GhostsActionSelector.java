@@ -27,31 +27,31 @@ public class GhostsActionSelector {
 
 	public Action findAction(GhostsDescription description) {
 		if (description != null) {
-			//System.out.println("Evaluate action: ");
 
 			boolean pacManCloseToPP = description.getDistanceToNearestPowerPillPacMan() < 30;
 			
 			// Blinky
 			if (this.ghost.equals(GHOST.BLINKY)) {
 				if ((description.getGhostEdibleBlinky() && description.getDistanceToPacmanBlinky() < 50) || pacManCloseToPP) {
-					//System.out.println("Select RUN Blinky");
 					return this.getAction("RunAwayFromPacManAction action " + GHOST.BLINKY);
 				}
+				else if (description.getGhostEdibleBlinky() && description.getEdibleTimeLeftBlinky() < 20) {
+					return this.getAction("ChasePacMan action " + GHOST.BLINKY);
+				}
 				if (!description.getGhostEdibleBlinky()) {
-					//System.out.println("Select aggresive Blinky");
 					return this.getAction("ChasePacMan action " + GHOST.BLINKY);
 				}
 			}
 			
-
 			// Pinky
 			if (this.ghost.equals(GHOST.PINKY)) {
 				if ((description.getGhostEdiblePinky() && description.getDistanceToPacmanPinky() < 50) || pacManCloseToPP) {
-					//System.out.println("Select RUN Pinky");
 					return this.getAction("RunAwayFromPacManAction action " + GHOST.PINKY);
 				}
+				else if (description.getGhostEdiblePinky() && description.getEdibleTimeLeftPinky() < 20) {
+					return this.getAction("ChasePacMan action " + GHOST.PINKY);
+				}
 				if (!description.getGhostEdiblePinky()) {
-					//System.out.println("Select aggresive Pinky");
 					return this.getAction("ChasePacMan action " + GHOST.PINKY);
 				}
 			}
@@ -59,11 +59,12 @@ public class GhostsActionSelector {
 			// Inky
 			if (this.ghost.equals(GHOST.INKY)) {
 				if ((description.getGhostEdibleInky() && description.getDistanceToPacmanInky() < 50) || pacManCloseToPP) {
-					//System.out.println("Select RUN Inky");
 					return this.getAction("RunAwayFromPacManAction action " + GHOST.INKY);
 				}
+				else if (description.getGhostEdibleInky() && description.getEdibleTimeLeftInky() < 20) {
+					return this.getAction("ChasePacMan action " + GHOST.INKY);
+				}
 				if (!description.getGhostEdibleInky()) {
-					//System.out.println("Select aggresive Inky");
 					return this.getAction("ChasePacMan action " + GHOST.INKY);
 				}
 			}
@@ -71,11 +72,12 @@ public class GhostsActionSelector {
 			// Sue
 			if (this.ghost.equals(GHOST.SUE)) {
 				if ((description.getGhostEdibleSue() && description.getDistanceToPacmanSue() < 50) || pacManCloseToPP) {
-					//System.out.println("Select RUN Sue");
 					return this.getAction("RunAwayFromPacManAction action " + GHOST.SUE);
 				}
+				else if (description.getGhostEdibleSue() && description.getEdibleTimeLeftSue() < 20) {
+					return this.getAction("ChasePacMan action " + GHOST.SUE);
+				}
 				if (!description.getGhostEdibleSue()) {
-					//System.out.println("Select aggresive Sue");
 					return this.getAction("ChasePacMan action " + GHOST.SUE);
 				}
 			}
