@@ -55,7 +55,7 @@ public class MsPacManStorageManager {
 		result.setTime(resultValueTime);
 		result.setLevel(game.getCurrentLevel());
 		result.setEatenPills(description.getLeftPills() - game.getActivePillsIndices().length);
-		result.setEatenPills(description.getLeftPPills() - game.getActivePowerPillsIndices().length);
+		result.setEatenPPills(description.getLeftPPills() - game.getActivePowerPillsIndices().length);
 		//Store the old case right now into the case base
 		//Alternatively we could store all them when game finishes in close() method
 		StoreCasesMethod.storeCase(this.caseBase, bCase);

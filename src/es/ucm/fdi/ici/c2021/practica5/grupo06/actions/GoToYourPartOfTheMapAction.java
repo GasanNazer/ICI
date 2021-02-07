@@ -9,7 +9,6 @@ import pacman.game.Game;
 public class GoToYourPartOfTheMapAction implements Action {
 
 	GHOST ghost;
-	private final static int LIMIT = 30;
 	
 	public GoToYourPartOfTheMapAction(GHOST ghost) {
 		this.ghost = ghost;

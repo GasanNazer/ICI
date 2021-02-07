@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.GhostsDescription;
+import es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.MsPacManDescription;
 import pacman.game.Game;
 
 public class MsPacManActionSelector {
@@ -29,9 +31,16 @@ public class MsPacManActionSelector {
 	 * 
 	 * @return
 	 */
-	public Action findAction() {
-		int randomIndex = new Random().nextInt(actions.size());
-		return actions.get(randomIndex);
+	public Action findAction(MsPacManDescription description) {
+		
+		if(description.getNearestNonEdibleGhostDist() < 40)
+			return this.getAction("RunAwayFromClosestGhosts");
+		if(description.getNearestEdibleGhostDist() < 100)
+			return this.getAction("RunTowardsNearestGhost");
+		if(description.getTimeEdibleLeft() <= 0 && description.getNearestNonEdibleGhostDist() != Integer.MAX_VALUE && description.getLeftPPills() > 0)
+			return this.getAction("RunTowardsPowerPill");
+		
+		return this.getAction("RunTowardsPill");
 	}
 
 	/**

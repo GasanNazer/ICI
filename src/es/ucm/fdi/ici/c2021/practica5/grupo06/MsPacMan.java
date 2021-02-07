@@ -6,8 +6,12 @@ import java.util.List;
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.MsPacManCBRengine;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.MsPacManStorageManager;
-import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.GoToPPillAction;
-import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.RunAwayAction;
+import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.RunAwayFromClosestGhosts;
+import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.RunAwayFromSpecificGhost;
+import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.RunTowardsNearestGhost;
+import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.RunTowardsPill;
+import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.RunTowardsPowerPill;
+import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.RunTowardsSpecificGhost;
 import pacman.controllers.PacmanController;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
@@ -26,8 +30,10 @@ public class MsPacMan extends PacmanController {
 		this.input = new MsPacManInput();
 
 		List<Action> actions = new ArrayList<Action>();
-		actions.add(new GoToPPillAction());
-		actions.add(new RunAwayAction());
+		actions.add(new RunAwayFromClosestGhosts());
+		actions.add(new RunTowardsPill());
+		actions.add(new RunTowardsPowerPill());
+		actions.add(new RunTowardsNearestGhost());
 		this.actionSelector = new MsPacManActionSelector(actions);
 
 		this.storageManager = new MsPacManStorageManager();
