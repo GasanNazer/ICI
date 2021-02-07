@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.poi.util.SystemOutLogger;
+
 import es.ucm.fdi.gaia.jcolibri.cbraplications.StandardCBRApplication;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRCase;
@@ -46,7 +48,6 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			super.PROP_FILEPATH = casebaseFile;
 			try {
 		         File file = new File(casebaseFile);
-		         System.out.println(file.getAbsolutePath());
 		         if(!file.exists())
 		        	 file.createNewFile();
 		      } catch(Exception e) {
@@ -108,7 +109,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			
 			double similarity = 0;
 			double bestScore = 0;
-			CBRCase mostSimilarCase = null;
+			CBRCase mostSimilarCase = results.iterator().next().get_case();
 			
 			for(RetrievalResult first : results) {
 				MsPacManResult result2 = (MsPacManResult)first.get_case().getResult();
@@ -125,7 +126,6 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			
 			//Now compute a solution for the query
 			this.action = actionSelector.getAction(solution.getAction());
-			
 			if(similarity<0.7) //Sorry not enough similarity, ask actionSelector for an action
 				this.action = actionSelector.findAction((MsPacManDescription) query.getDescription());
 			
@@ -194,28 +194,50 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		MsPacManDescription _case = (MsPacManDescription) description2;
 
 		double simil = 0;
-
-		simil += Math.abs(_query.getScore() - _case.getScore()) / 150000;
-
-		simil += Math.abs(_query.getTime() - _case.getTime()) / 4000;
+		double aux = Math.abs(_query.getScore() - _case.getScore());
 		
-		simil += Math.abs(_query.getTimeEdibleLeft() - _case.getTimeEdibleLeft()) / 4000;
-
-		simil += 3 * (Math.abs(_query.getNearestPPill() - _case.getNearestPPill()) / 650);
+		double nums = 11.0;
+		simil += aux / 5000;
 		
-		simil += 2 * (Math.abs(_query.getNearestPill() - _case.getNearestPill()) / 650);
+		aux = Math.abs(_query.getTime() - _case.getTime());
+		simil += aux / 4000;
 		
-		simil += 3 * (Math.abs(_query.getNearestNonEdibleGhostDist() - _case.getNearestNonEdibleGhostDist()) / 650);
+		aux = Math.abs(_query.getTimeEdibleLeft() - _case.getTimeEdibleLeft());
+		simil += aux / 4000;
 		
-		simil += 2 * (Math.abs(_query.getNearestEdibleGhostDist() - _case.getNearestEdibleGhostDist()) / 650);
+		aux = 3 * Math.abs(_query.getNearestPPill() - _case.getNearestPPill());
+		if(_query.getNearestPPill() != Integer.MAX_VALUE && _case.getNearestPPill() != Integer.MAX_VALUE) {
+			simil += aux / 650;
+			nums += 3.0;
+		}
 		
-		simil += 3 * (Math.abs(_query.getLeftPPills() - _case.getLeftPPills()) / 4);
+		aux = 2 * Math.abs(_query.getNearestPill() - _case.getNearestPill());
+		if(_query.getNearestPill() != Integer.MAX_VALUE && _case.getNearestPill() != Integer.MAX_VALUE) {
+			simil += aux / 650;
+			nums += 2.0;
+		}
 		
-		simil += 3 * (Math.abs(_query.getLeftPills() - _case.getLeftPills()) / 230);
+		aux = 3 * Math.abs(_query.getNearestNonEdibleGhostDist() - _case.getNearestNonEdibleGhostDist());
+		if(_query.getNearestNonEdibleGhostDist() != Integer.MAX_VALUE && _case.getNearestNonEdibleGhostDist() != Integer.MAX_VALUE) {
+			simil += aux / 650;
+			nums += 3.0;
+		}
+		
+		aux = 2 * Math.abs(_query.getNearestEdibleGhostDist() - _case.getNearestEdibleGhostDist());
+		if(_query.getNearestEdibleGhostDist() != Integer.MAX_VALUE && _case.getNearestEdibleGhostDist() != Integer.MAX_VALUE) {
+			simil += aux / 650;
+			nums += 2.0;
+		}
+		
+		aux = 3 * Math.abs(_query.getLeftPPills() - _case.getLeftPPills());
+		simil += aux / 4;
+		
+		aux = 3 * Math.abs(_query.getLeftPills() - _case.getLeftPills());
+		simil += aux / 230;
 		
 		simil += 2 * (_query.getEdibleGhost().equals(_case.getEdibleGhost()) ? 1.0 : 0.0);
 		
-		return simil / 21.0;
+		return 1.0 - (simil / nums);
 
 	}
 

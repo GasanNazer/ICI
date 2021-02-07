@@ -79,7 +79,6 @@ public class RunAwayFromClosestGhosts implements Action {
 					nearestGhost = ghostType;
 				}
 			} catch (Exception ex) {
-				System.out.println("Ghost consumed.");
 			}
 
 		}
@@ -88,6 +87,6 @@ public class RunAwayFromClosestGhosts implements Action {
 
 	@Override
 	public String getActionId() {
-		return "RunAwayFromClosestGhost";
+		return "RunAwayFromClosestGhosts";
 	}
 }
