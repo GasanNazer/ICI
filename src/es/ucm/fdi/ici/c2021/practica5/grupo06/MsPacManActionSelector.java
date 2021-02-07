@@ -31,11 +31,11 @@ public class MsPacManActionSelector {
 	 * 
 	 * @return
 	 */
-	public Action findAction(MsPacManDescription description) {
-		
-		if(description.getNearestNonEdibleGhostDist() < 40)
+	public Action findAction(MsPacManDescription description) {		
+		if(description.getNearestNonEdibleGhostDist() < 50) {
 			return this.getAction("RunAwayFromClosestGhosts");
-		if(description.getNearestEdibleGhostDist() < 100)
+		}
+		if(description.getNearestEdibleGhostDist() < 150)
 			return this.getAction("RunTowardsNearestGhost");
 		if(description.getTimeEdibleLeft() <= 0 && description.getNearestNonEdibleGhostDist() != Integer.MAX_VALUE && description.getLeftPPills() > 0)
 			return this.getAction("RunTowardsPowerPill");

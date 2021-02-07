@@ -86,7 +86,7 @@ public class MsPacManInput implements Input {
 	
 	private void computeNearestPPill(Game game) {
 		nearestPPill = Integer.MAX_VALUE;
-		leftPPills = game.getActivePowerPillsIndices().length;
+		leftPPills = game.getNumberOfActivePowerPills();
 		for(int pos: game.getActivePowerPillsIndices()) {
 			int distance = (int)game.getDistance(game.getPacmanCurrentNodeIndex(), pos, game.getPacmanLastMoveMade(), DM.PATH);
 			if(distance < nearestPPill) {
@@ -100,7 +100,7 @@ public class MsPacManInput implements Input {
 	
 	private void computeNearestPill(Game game) {
 		nearestPill = Integer.MAX_VALUE;
-		leftPills = game.getActivePillsIndices().length;
+		leftPills = game.getNumberOfActivePills();
 		for(int pos: game.getActivePillsIndices()) {
 			int distance = (int)game.getDistance(game.getPacmanCurrentNodeIndex(), pos, game.getPacmanLastMoveMade(), DM.PATH);
 			if(distance < nearestPill) {
