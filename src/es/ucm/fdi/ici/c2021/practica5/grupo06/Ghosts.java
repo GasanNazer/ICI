@@ -4,15 +4,10 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 
-import org.hibernate.boot.model.source.internal.hbm.AbstractSingularAttributeSourceEmbeddedImpl;
-
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.GhostsCBRengine;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.CBRengine.GhostsStorageManager;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.ChasePacManAction;
-import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.GoToPPillAction;
-import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.GoToPacmanStartingPointAction;
-import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.RunAwayAction;
 import es.ucm.fdi.ici.c2021.practica5.grupo06.actions.RunAwayFromPacManAction;
 import pacman.controllers.GhostController;
 import pacman.game.Constants.GHOST;

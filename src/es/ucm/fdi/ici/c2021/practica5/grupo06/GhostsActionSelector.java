@@ -52,6 +52,30 @@ public class GhostsActionSelector {
 					return this.getAction("ChasePacMan action " + GHOST.PINKY);
 				}
 			}
+			
+			// Inky
+			if (this.ghost.equals(GHOST.INKY)) {
+				if (description.getGhostEdibleInky() && description.getDistanceToPacmanInky() < 50) {
+					//System.out.println("Select RUN Inky");
+					return this.getAction("RunAwayFromPacManAction action " + GHOST.INKY);
+				}
+				if (!description.getGhostEdibleInky()) {
+					//System.out.println("Select aggresive Inky");
+					return this.getAction("ChasePacMan action " + GHOST.INKY);
+				}
+			}
+				
+			// Sue
+			if (this.ghost.equals(GHOST.SUE)) {
+				if (description.getGhostEdibleSue() && description.getDistanceToPacmanSue() < 50) {
+					//System.out.println("Select RUN Sue");
+					return this.getAction("RunAwayFromPacManAction action " + GHOST.SUE);
+				}
+				if (!description.getGhostEdibleSue()) {
+					//System.out.println("Select aggresive Sue");
+					return this.getAction("ChasePacMan action " + GHOST.SUE);
+				}
+			}
 
 		}
 

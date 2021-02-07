@@ -35,8 +35,9 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	
 	
 	
-	final static String CONNECTOR_FILE_PATH = "es\\ucm\\fdi\\ici\\c2021\\practica5\\grupo06\\CBRengine\\plaintextconfig.xml"; //Cuidado!! poner el grupo aquí
-
+	//final static String CONNECTOR_FILE_PATH = "es\\ucm\\fdi\\ici\\c2021\\practica5\\grupo06\\CBRengine\\plaintextconfig.xml"; //Cuidado!! poner el grupo aquí
+	final static String CONNECTOR_FILE_PATH = "es/ucm/fdi/ici/c2021/practica5/grupo06/CBRengine/plaintextconfig.xml"; //Cuidado!! poner el grupo aquí
+	
 	/**
 	 * Simple extension to allow custom case base files. It also creates a new empty file if it does not exist.
 	 */
@@ -83,8 +84,8 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		simConfig.addMapping(new Attribute("nearestPill",MsPacManDescription.class), new Interval(650));
 		simConfig.addMapping(new Attribute("nearestNonEdibleGhostDist",MsPacManDescription.class), new Interval(650));
 		simConfig.addMapping(new Attribute("nearestEdibleGhostDist",MsPacManDescription.class), new Interval(650));
-		simConfig.addMapping(new Attribute("leftPills",MsPacManDescription.class), new Interval(650));
-		simConfig.addMapping(new Attribute("leftPPills",MsPacManDescription.class), new Interval(650));
+		simConfig.addMapping(new Attribute("leftPills",MsPacManDescription.class), new Interval(230));
+		simConfig.addMapping(new Attribute("leftPPills",MsPacManDescription.class), new Interval(4));
 		simConfig.addMapping(new Attribute("edibleGhost",MsPacManDescription.class), new Equal());
 	}
 
@@ -97,32 +98,37 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 	@Override
 	public void cycle(CBRQuery query) throws ExecutionException {
 		if(caseBase.getCases().isEmpty()) {
-			this.action = actionSelector.findAction();
+			this.action = actionSelector.findAction((MsPacManDescription) query.getDescription());
 		}else {
 			//Compute NN
-			//Collection<RetrievalResult> eval = NNScoringMethod.evaluateSimilarity(caseBase.getCases(), query, simConfig);
 			Collection<RetrievalResult> eval = customNN(caseBase.getCases(), query);
 			
 			// This simple implementation only uses 1NN
 			// Consider using kNNs with majority voting
-			RetrievalResult first = SelectCases.selectTopKRR(eval, 1).iterator().next();
+			//RetrievalResult first = SelectCases.selectTopKRR(eval, 1).iterator().next();
 			
 			//TODO implementation of majority voting
-			//Collection<RetrievalResult> first = SelectCases.selectTopKRR(eval, 5);
+			Collection<RetrievalResult> results = SelectCases.selectTopKRR(eval, 5);
 			
+			double similarity = 0;
+			CBRCase mostSimilarCase = null;
 			
-			
-			CBRCase mostSimilarCase = first.get_case();
-			double similarity = first.getEval();
+			for(RetrievalResult first : results) {
+				if(first.getEval() > similarity) {
+					similarity = first.getEval();
+					mostSimilarCase = first.get_case();
+				}
+			}
 	
 			MsPacManResult result = (MsPacManResult) mostSimilarCase.getResult();
 			MsPacManSolution solution = (MsPacManSolution) mostSimilarCase.getSolution();
+			
 			
 			//Now compute a solution for the query
 			this.action = actionSelector.getAction(solution.getAction());
 			
 			if(similarity<0.7) //Sorry not enough similarity, ask actionSelector for an action
-				this.action = actionSelector.findAction();
+				this.action = actionSelector.findAction((MsPacManDescription) query.getDescription());
 			
 			else if(result.getScore()<0) //This was a bad case, ask actionSelector for another one.
 				this.action = actionSelector.findAnotherAction(solution.getAction());
@@ -193,16 +199,24 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 		simil += Math.abs(_query.getScore() - _case.getScore()) / 150000;
 
 		simil += Math.abs(_query.getTime() - _case.getTime()) / 4000;
+		
+		simil += Math.abs(_query.getTimeEdibleLeft() - _case.getTimeEdibleLeft()) / 4000;
 
-		/*
-		 * simil += Math.abs(_query.getNearestPPill() - _case.getNearestPPill()) / 650;
-		 * 
-		 * simil += Math.abs(_query.getNearestGhost() - _case.getNearestGhost()) / 650;
-		 * 
-		 * simil += _query.getEdibleGhost().equals(_case.getEdibleGhost()) ? 1.0 : 0.0;
-		 * 
-		 */
-		return simil / 5.0;
+		simil += Math.abs(_query.getNearestPPill() - _case.getNearestPPill()) / 650;
+		
+		simil += Math.abs(_query.getNearestPill() - _case.getNearestPill()) / 650;
+		
+		simil += Math.abs(_query.getNearestNonEdibleGhostDist() - _case.getNearestNonEdibleGhostDist()) / 650;
+		
+		simil += Math.abs(_query.getNearestEdibleGhostDist() - _case.getNearestEdibleGhostDist()) / 650;
+		
+		simil += Math.abs(_query.getLeftPPills() - _case.getLeftPPills()) / 4;
+		
+		simil += Math.abs(_query.getLeftPills() - _case.getLeftPills()) / 230;
+		
+		simil += _query.getEdibleGhost().equals(_case.getEdibleGhost()) ? 1.0 : 0.0;
+		
+		return simil / 10.0;
 
 	}
 
