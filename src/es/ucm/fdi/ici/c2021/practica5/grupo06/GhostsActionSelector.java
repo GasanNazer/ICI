@@ -32,7 +32,7 @@ public class GhostsActionSelector {
 			
 			// Blinky
 			if (this.ghost.equals(GHOST.BLINKY)) {
-				if ((description.getGhostEdibleBlinky() && description.getDistanceToPacmanBlinky() < 50) || pacManCloseToPP) {
+				if ((description.getGhostEdibleBlinky() && description.getDistanceToPacmanBlinky() < 50) || (pacManCloseToPP && description.getDistanceToPacmanBlinky() < 50)) {
 					return this.getAction("RunAwayFromPacManAction action " + GHOST.BLINKY);
 				}
 				else if (description.getGhostEdibleBlinky() && description.getEdibleTimeLeftBlinky() < 20) {
@@ -45,7 +45,7 @@ public class GhostsActionSelector {
 			
 			// Pinky
 			if (this.ghost.equals(GHOST.PINKY)) {
-				if ((description.getGhostEdiblePinky() && description.getDistanceToPacmanPinky() < 50) || pacManCloseToPP) {
+				if ((description.getGhostEdiblePinky() && description.getDistanceToPacmanPinky() < 50) || (pacManCloseToPP && description.getDistanceToPacmanPinky() < 50)) {
 					return this.getAction("RunAwayFromPacManAction action " + GHOST.PINKY);
 				}
 				else if (description.getGhostEdiblePinky() && description.getEdibleTimeLeftPinky() < 20) {
@@ -58,7 +58,7 @@ public class GhostsActionSelector {
 			
 			// Inky
 			if (this.ghost.equals(GHOST.INKY)) {
-				if ((description.getGhostEdibleInky() && description.getDistanceToPacmanInky() < 50) || pacManCloseToPP) {
+				if ((description.getGhostEdibleInky() && description.getDistanceToPacmanInky() < 50) || (pacManCloseToPP && description.getDistanceToPacmanInky() < 50)) {
 					return this.getAction("RunAwayFromPacManAction action " + GHOST.INKY);
 				}
 				else if (description.getGhostEdibleInky() && description.getEdibleTimeLeftInky() < 20) {
@@ -71,7 +71,7 @@ public class GhostsActionSelector {
 				
 			// Sue
 			if (this.ghost.equals(GHOST.SUE)) {
-				if ((description.getGhostEdibleSue() && description.getDistanceToPacmanSue() < 50) || pacManCloseToPP) {
+				if ((description.getGhostEdibleSue() && description.getDistanceToPacmanSue() < 50) || (pacManCloseToPP && description.getDistanceToPacmanBlinky() < 50)) {
 					return this.getAction("RunAwayFromPacManAction action " + GHOST.SUE);
 				}
 				else if (description.getGhostEdibleSue() && description.getEdibleTimeLeftSue() < 20) {

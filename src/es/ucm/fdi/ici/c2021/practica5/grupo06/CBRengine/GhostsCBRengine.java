@@ -156,7 +156,7 @@ public class GhostsCBRengine implements StandardCBRApplication {
 			
 			for(RetrievalResult first : SelectCases.selectTopKRR(eval, 5)) {
 				GhostsResult res = (GhostsResult)first.get_case().getResult();
-				if(res.getScore() < lowestScore && first.getEval() >= 0.7) {
+				if(res.getScore() < lowestScore && first.getEval() >= 0.8) {
 					similarity = first.getEval();
 					lowestScore = res.getScore();
 					mostSimilarCase = first.get_case();
@@ -165,18 +165,15 @@ public class GhostsCBRengine implements StandardCBRApplication {
 			
 			GhostsSolution solution = (GhostsSolution) mostSimilarCase.getSolution();
 			
-			System.out.println("similarity: " + similarity);
 
 			// Now compute a solution for the query
 			this.action = actionSelector.getAction(solution.getAction());
 			
 			GhostsDescription queryDescription = (GhostsDescription)query.getDescription();
 			
-			if (similarity < 0.7) {
+			if (similarity < 0.8) {
 				this.action = actionSelector.findAction(queryDescription);
 			}
-			
-			System.out.println("Action: " + this.action.getActionId());
 		}
 		CBRCase newCase = createNewCase(query);
 		this.storageManager.storeCase(newCase);

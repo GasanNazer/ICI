@@ -81,13 +81,11 @@ public class Ghosts extends GhostController {
 				try {
 					input.parseInput(game);
 					//actionSelector.setGame(game);
-					System.out.println("Ghost" + ghost);
 					actionSelector.setGhost(ghost);
 					storageManager.setGame(game);
 					cbrEngine.cycle(input.getQuery());
 					Action action = cbrEngine.getSolution();
 					result.put(ghost, action.execute(game));
-					System.out.println("Move: " + action.getActionId());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

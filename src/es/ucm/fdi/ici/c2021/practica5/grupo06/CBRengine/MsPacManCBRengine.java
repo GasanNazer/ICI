@@ -48,6 +48,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			super.PROP_FILEPATH = casebaseFile;
 			try {
 		         File file = new File(casebaseFile);
+		         System.out.println(file.getAbsolutePath());
 		         if(!file.exists())
 		        	 file.createNewFile();
 		      } catch(Exception e) {
@@ -113,7 +114,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			
 			for(RetrievalResult first : results) {
 				MsPacManResult result2 = (MsPacManResult)first.get_case().getResult();
-				if(result2.getScore() > bestScore && first.getEval() >= 0.7){
+				if(result2.getScore() > bestScore && first.getEval() >= 0.9){
 					bestScore = result2.getScore();
 					similarity = first.getEval();
 					mostSimilarCase = first.get_case();
@@ -126,7 +127,7 @@ public class MsPacManCBRengine implements StandardCBRApplication {
 			
 			//Now compute a solution for the query
 			this.action = actionSelector.getAction(solution.getAction());
-			if(similarity<0.7) //Sorry not enough similarity, ask actionSelector for an action
+			if(similarity<0.9) //Sorry not enough similarity, ask actionSelector for an action
 				this.action = actionSelector.findAction((MsPacManDescription) query.getDescription());
 			
 			else if(result.getScore()<0) //This was a bad case, ask actionSelector for another one.
