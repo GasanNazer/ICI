@@ -29,9 +29,11 @@ public class GhostsActionSelector {
 		if (description != null) {
 			//System.out.println("Evaluate action: ");
 
+			boolean pacManCloseToPP = description.getDistanceToNearestPowerPillPacMan() < 30;
+			
 			// Blinky
 			if (this.ghost.equals(GHOST.BLINKY)) {
-				if (description.getGhostEdibleBlinky() && description.getDistanceToPacmanBlinky() < 50) {
+				if ((description.getGhostEdibleBlinky() && description.getDistanceToPacmanBlinky() < 50) || pacManCloseToPP) {
 					//System.out.println("Select RUN Blinky");
 					return this.getAction("RunAwayFromPacManAction action " + GHOST.BLINKY);
 				}
@@ -40,10 +42,11 @@ public class GhostsActionSelector {
 					return this.getAction("ChasePacMan action " + GHOST.BLINKY);
 				}
 			}
+			
 
 			// Pinky
 			if (this.ghost.equals(GHOST.PINKY)) {
-				if (description.getGhostEdiblePinky() && description.getDistanceToPacmanPinky() < 50) {
+				if ((description.getGhostEdiblePinky() && description.getDistanceToPacmanPinky() < 50) || pacManCloseToPP) {
 					//System.out.println("Select RUN Pinky");
 					return this.getAction("RunAwayFromPacManAction action " + GHOST.PINKY);
 				}
@@ -55,7 +58,7 @@ public class GhostsActionSelector {
 			
 			// Inky
 			if (this.ghost.equals(GHOST.INKY)) {
-				if (description.getGhostEdibleInky() && description.getDistanceToPacmanInky() < 50) {
+				if ((description.getGhostEdibleInky() && description.getDistanceToPacmanInky() < 50) || pacManCloseToPP) {
 					//System.out.println("Select RUN Inky");
 					return this.getAction("RunAwayFromPacManAction action " + GHOST.INKY);
 				}
@@ -67,7 +70,7 @@ public class GhostsActionSelector {
 				
 			// Sue
 			if (this.ghost.equals(GHOST.SUE)) {
-				if (description.getGhostEdibleSue() && description.getDistanceToPacmanSue() < 50) {
+				if ((description.getGhostEdibleSue() && description.getDistanceToPacmanSue() < 50) || pacManCloseToPP) {
 					//System.out.println("Select RUN Sue");
 					return this.getAction("RunAwayFromPacManAction action " + GHOST.SUE);
 				}

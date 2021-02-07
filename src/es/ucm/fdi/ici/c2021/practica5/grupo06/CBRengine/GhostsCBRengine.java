@@ -143,34 +143,34 @@ public class GhostsCBRengine implements StandardCBRApplication {
 	@Override
 	public void cycle(CBRQuery query) throws ExecutionException {
 		if (caseBase.getCases().isEmpty()) {
-			this.action = actionSelector.findAction(null);
+			this.action = actionSelector.findAction((GhostsDescription)query.getDescription());
 		} else {
 			// Compute NN
-			// Collection<RetrievalResult> eval =
-			// NNScoringMethod.evaluateSimilarity(caseBase.getCases(), query,
-			// simConfig);
 			Collection<RetrievalResult> eval = customNN(caseBase.getCases(), query);
 
-			// This simple implementation only uses 1NN
-			// Consider using kNNs with majority voting
-			RetrievalResult first = SelectCases.selectTopKRR(eval, 1).iterator().next();
-			CBRCase mostSimilarCase = first.get_case();
-			double similarity = first.getEval();
-
-			GhostsResult result = (GhostsResult) mostSimilarCase.getResult();
-			GhostsSolution solution = (GhostsSolution) mostSimilarCase.getSolution();
+			double similarity = 0;
+			double lowestScore = Double.MAX_VALUE;
+			CBRCase mostSimilarCase = null;
+			GhostsSolution solution = null;
+			
+			for(RetrievalResult first : SelectCases.selectTopKRR(eval, 5)) {
+				GhostsResult res = (GhostsResult)first.get_case().getResult();
+				if(res.getScore() < lowestScore && first.getEval() >= 0.7) {
+					similarity = first.getEval();
+					lowestScore = res.getScore();
+					mostSimilarCase = first.get_case();
+					solution = (GhostsSolution) mostSimilarCase.getSolution();
+				}
+			}
 
 			// Now compute a solution for the query
 			this.action = actionSelector.getAction(solution.getAction());
 			
-			GhostsDescription selectedCaseDescription = (GhostsDescription)mostSimilarCase.getDescription();
+			GhostsDescription queryDescription = (GhostsDescription)query.getDescription();
 			
 			if (similarity < 0.7) {
-				this.action = actionSelector.findAction(selectedCaseDescription);
+				this.action = actionSelector.findAction(queryDescription);
 			}
-
-			//else if (result.getScore() < 0) // This was a bad case, ask actionSelector for another one.
-			//	this.action = actionSelector.findAnotherAction(solution.getAction());
 		}
 		CBRCase newCase = createNewCase(query);
 		this.storageManager.storeCase(newCase);
@@ -234,22 +234,33 @@ public class GhostsCBRengine implements StandardCBRApplication {
 
 		double simil = 0;
 
-		simil += Math.abs(_query.getScore() - _case.getScore()) / 150000;
+		simil += Math.abs(_query.getScore() - _case.getScore()) / 15000;
 
 		simil += Math.abs(_query.getTime() - _case.getTime()) / 4000;
 		
-				
-		//simil += Math.abs(_query.getDistanceToNearestPowerPillBlinky() - _query.getDistanceToNearestPowerPillBlinky())
+		
+		//distanceToPacman
+		simil += Math.abs(_query.getDistanceToPacmanBlinky() - _case.getDistanceToPacmanBlinky()) / 650;
+		simil += Math.abs(_query.getDistanceToPacmanPinky() - _case.getDistanceToPacmanPinky()) / 650;
+		simil += Math.abs(_query.getDistanceToPacmanInky() - _case.getDistanceToPacmanInky()) / 650;
+		simil += Math.abs(_query.getDistanceToPacmanSue() - _case.getDistanceToPacmanSue()) / 650;
+		
+		//edibleTimeLeft
+		simil += Math.abs(_query.getEdibleTimeLeftBlinky() - _case.getEdibleTimeLeftBlinky()) / 60;
+		simil += Math.abs(_query.getEdibleTimeLeftPinky() - _case.getEdibleTimeLeftPinky()) / 60;
+		simil += Math.abs(_query.getEdibleTimeLeftInky() - _case.getEdibleTimeLeftInky()) / 60;
+		simil += Math.abs(_query.getEdibleTimeLeftSue() - _case.getEdibleTimeLeftSue()) / 60;
+		
+		//ghostEdible
+		simil += _query.getGhostEdibleBlinky().equals(_case.getGhostEdibleBlinky()) ? 1.0 : 0.0;
+		simil += _query.getGhostEdiblePinky().equals(_case.getGhostEdiblePinky()) ? 1.0 : 0.0;
+		simil += _query.getGhostEdibleInky().equals(_case.getGhostEdibleInky()) ? 1.0 : 0.0;
+		simil += _query.getGhostEdibleSue().equals(_case.getGhostEdibleSue()) ? 1.0 : 0.0;
+		
+		// distancePacmanPP
+		simil += Math.abs(_query.getDistanceToNearestPowerPillPacMan() - _case.getDistanceToNearestPowerPillPacMan()) / 650;
 
-		/*
-		 * simil += Math.abs(_query.getNearestPPill() - _case.getNearestPPill()) / 650;
-		 * 
-		 * simil += Math.abs(_query.getNearestGhost() - _case.getNearestGhost()) / 650;
-		 * 
-		 * simil += _query.getEdibleGhost().equals(_case.getEdibleGhost()) ? 1.0 : 0.0;
-		 * 
-		 */
-		return simil / 5.0;
+		return simil / 15.0;
 
 	}
 

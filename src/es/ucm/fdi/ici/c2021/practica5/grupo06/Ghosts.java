@@ -90,7 +90,6 @@ public class Ghosts extends GhostController {
 			}
 		}
 		
-		System.out.println(result.get(GHOST.BLINKY));
 		
 		return result;
 	}
