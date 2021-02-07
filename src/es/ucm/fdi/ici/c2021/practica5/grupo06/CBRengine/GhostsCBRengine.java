@@ -150,8 +150,9 @@ public class GhostsCBRengine implements StandardCBRApplication {
 
 			double similarity = 0;
 			double lowestScore = Double.MAX_VALUE;
-			CBRCase mostSimilarCase = null;
-			GhostsSolution solution = null;
+			
+			RetrievalResult res_initial = SelectCases.selectTopKRR(eval, 1).iterator().next();
+			CBRCase mostSimilarCase = res_initial.get_case();
 			
 			for(RetrievalResult first : SelectCases.selectTopKRR(eval, 5)) {
 				GhostsResult res = (GhostsResult)first.get_case().getResult();
@@ -159,9 +160,10 @@ public class GhostsCBRengine implements StandardCBRApplication {
 					similarity = first.getEval();
 					lowestScore = res.getScore();
 					mostSimilarCase = first.get_case();
-					solution = (GhostsSolution) mostSimilarCase.getSolution();
 				}
 			}
+			
+			GhostsSolution solution = (GhostsSolution) mostSimilarCase.getSolution();
 
 			// Now compute a solution for the query
 			this.action = actionSelector.getAction(solution.getAction());
